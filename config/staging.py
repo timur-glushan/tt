@@ -1,10 +1,10 @@
 DATABASE = {
   'engine':'mysql',
-  'user':'bideveloper',
-  'passwd':'nehjgenj',
-  'host':'10.217.153.108',
+  'user':'root',
+  'passwd':'test',
+  'host':'127.0.0.1',
   'port':3306,
-  'schema':'t3'
+  'schema':'tt'
 }
 COUCHDB = {
   'database': 'run4',
@@ -12,12 +12,12 @@ COUCHDB = {
   'name': 'admin',
   'password': 'PPcouchdbAdmin'
 }
-DEBUG = True
+DEBUG = False
 HOME_PAGE = 'application_index'
-SECRET_KEY = 'staging key'
-ENVIRONMENT = 'staging'
-HOST = '10.217.153.106'
-PORT = 5010
+SECRET_KEY = 'development key'
+ENVIRONMENT = 'development'
+HOST = '172.31.20.8'
+PORT = 5000
 COMMON = {
   'pageSize':20
 }
