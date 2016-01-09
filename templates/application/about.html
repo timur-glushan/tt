@@ -1,0 +1,31 @@
+{% if request.is_ajax %}{% extends "_popup.html" %}{% else %}{% extends "layout.html" %}{% endif %}
+
+{% block content %}
+
+<h5>{{ _t('application name') }} {{ _t('common:version_short') }} <b>{{ config['VERSION'].__str__() }}</b></h5>
+
+{% if _var('maintainer', scope='general') %}
+<p>{{ _t('common:by') }} <a href="mailto:{{ _var('feedback', scope='general') }}">{{ _var('maintainer', scope='general')|safe }}</a></p>
+<br/>
+{% endif %}
+
+<h5>{{ _t('common:changes') }}:</h5>
+<p>{{ g._t('changes_v'+config['VERSION'].__str__())|safe }}</p>
+<br/>
+
+{% if _var('thanks_to', scope='general', default=[]) %}
+<h5>{{ _t('thanks to') }}</h5>
+<p>{{ ', '.join(_var('thanks_to', scope='general', default=[])) }}
+{{ _t('and others') }}
+</p>
+<br/>
+{% endif %}
+
+<p>
+	<a class="show-popup submit-feedback pull-right" href="{{ url_for('feedback_submit') }}">
+		<i class="icon-envelope-alt"></i> 
+		<span class="menu-title">{{ g._t('feedback') }}</span>
+	</a>
+</p>
+
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+		{% if access('project', action='update', project=project) %}
+		<li>
+			<a href="{{ url_for( 'project_view', project_id=project.id.__str__()|urlencode ) }}">
+				<span>{{ project.__str__() }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}">
+				<span><i class="icon-edit"></i> {{ _t('edit this project') }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}">
+				<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t('delete this project') }}</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<div class="span12 well">
+		<form method="POST" class="pull-left" >
+			{% if not submittedMembership.id %}
+			{% for error in submittedMembership.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="POST">
+		
+			<div class="pull-left input-group">
+				<label for="membership_component_id">{{ _t('component') }}</label>
+				<select name="membership_component_id">
+					<option value=""></option>
+					{% for component in project.components %}
+					<option value="{{ component.id }}" {% if not submittedMembership.id and submittedMembership.component_id==component.id %}selected="selected"{% endif %}>{{ component.__str__() }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="membership_account_id">{{ _t('account') }}</label>
+				<select name="membership_account_id">
+					<option value=""></option>
+					{% for account in accountList %}
+					<option value="{{ account.id }}" {% if not submittedMembership.id and submittedMembership.account_id==account.id %}selected="selected"{% endif %}>{{ account.__str__() }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="membership_role_id">{{ _t('role') }}</label>
+				{% if access('project', action='role', project=project) %}
+				<select name="membership_role_id">
+					<option value=""></option>
+					{% for role in roleList %}
+					<option value="{{ role.id }}" {% if not submittedMembership.id and submittedMembership.role_id==role.id %}selected="selected"{% endif %}>{{ role.__str__() }}</option>
+					{% endfor %}
+				</select>
+				{% else %}
+				<input type="hidden" name="membership_role_id" value="{{ roleDefault.id }}" />
+				<input type="text" value="{{ roleDefault.__str__() }}" readonly />
+				{% endif %}
+			</div>
+			
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('create') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+	</div>
+	<div class="span3"></div>
+	
+	{% for membership in project.members %}
+	<div class="span12 well">
+		<form method="POST" class="" >
+			{% if submittedMembership.id == membership.id %}
+			{% for error in submittedMembership.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="PUT">
+			<input type="hidden" name="membership_id" value="{{ membership.id }}" />
+		
+			<div class="pull-left input-group">
+				<label for="membership_component_id">{{ _t('component') }}</label>
+				<select name="membership_component_id">
+					<option value=""></option>
+					{% for component in project.components %}
+					<option value="{{ component.id }}" {% if submittedMembership.id==membership.id and submittedMembership.component_id==component.id %}selected="selected"{% elif membership.component_id==component.id %}selected="selected"{% endif %}>{{ component.__str__() }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="membership_account_id">{{ _t('account') }}</label>
+				<select name="membership_account_id">
+					<option value=""></option>
+					{% for account in accountList %}
+					<option value="{{ account.id }}" {% if submittedMembership.id==membership.id and submittedMembership.account_id==account.id %}selected="selected"{% elif membership.account_id==account.id %}selected="selected"{% endif %}>{{ account.__str__() }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="membership_role_id">{{ _t('role') }}</label>
+				{% if access('project', action='role', project=project) %}
+				<select name="membership_role_id">
+					<option value=""></option>
+					{% for role in roleList %}
+					<option value="{{ role.id }}" {% if submittedMembership.id==membership.id and submittedMembership.role_id==role.id %}selected="selected"{% elif membership.role_id==role.id %}selected="selected"{% endif %}>{{ role.__str__() }}</option>
+					{% endfor %}
+				</select>
+				{% else %}
+				<input type="hidden" name="membership_role_id" value="{% if submittedMembership.id==membership.id %}{{ submittedMembership.role.id }}{% else %}{{ membership.role.id }}{% endif %}" />
+				<input type="text" value="{% if submittedMembership.id==membership.id %}{{ submittedMembership.role.__str__() }}{% else %}{{ membership.role.__str__() }}{% endif %}" readonly />
+				{% endif %}
+			</div>
+			
+			<div class="clearfix"></div>
+			
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('update') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+		
+		<form method="POST" class="" >
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="DELETE">
+			<input type="hidden" name="membership_id" value="{{ membership.id }}" />
+			
+			<div class="pull-left input-group">
+				<input style="vertical-align:top;" type="submit" value="{{ _t('delete') }}" class="form-control btn btn-danger" />
+			</div>
+		</form>
+	</div>
+	{% endfor %}
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

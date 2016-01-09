@@ -1,0 +1,9 @@
+<div class="pager">	
+	{% for page in pager %}
+		{% if ( pager.index( page )+1 ).__str__() ==  request.args.get( 'page', 1 ).__str__() %}
+			<span>{{ pager.index( page )+1 }}</span>
+		{% else %}
+			<a href="{{ page }}">{{ pager.index( page )+1 }}</a>
+		{% endif %}
+	{% endfor %}
+</div>

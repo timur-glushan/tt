@@ -1,0 +1,149 @@
+<!-- HEADER REGULAR -->
+<div class="navbar navbar-fixed-top" id="header-menu">
+	<div class="navbar-inner">
+		<div class="container">
+			<div class="row">
+				<ul id="header-menu-main" class="nav">
+					<li class="">
+						<a title="{{ _t( 'application name' ) }}" class="brand" href="{{ url_for( 'application_index' ) }}">
+							<img style="width:2em; margin:-1em 1em;" class="logo" src="{{ url_for( 'static', filename='images/logo-light.png' ) }}" />
+							<span class="menu-title">
+								<b>{% autoescape off %}{{ _t( 'application title' ) }}{% endautoescape %}</b>
+							</span>
+						</a>
+					</li>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="{{ url_for( 'report_index', account_id=g.account.id ) }}"><i class="icon-time"></i> <span class="menu-title">{{ _t( 'reports' ) }}</span> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							{% if access('activity', account=account) %}
+							<li class="{% if _is_active_path( url_for( 'report_index', account_id=g.account.id ) ) %}active{% endif %}"><a href="{{ url_for( 'report_index', account_id=g.account.id ) }}"><i class="icon-time"></i> <span class="menu-title">{{ _t( 'my reports' ) }}</span></a></li>
+							<li class="{% if _is_active_path( url_for( 'effort_index', account_id=g.account.id ) ) %}active{% endif %}"><a href="{{ url_for( 'effort_index', account_id=g.account.id ) }}"><i class="icon-table"></i> <span class="menu-title">{{ _t( 'my efforts' ) }}</span></a></li>
+							{% endif %}
+							
+							{% if access('activity') %}
+							<li class="{% if _is_active_path( url_for( 'effort_summary' ) ) %}active{% endif %}"><a href="{{ url_for( 'effort_summary' ) }}"><i class="icon-calendar"></i> <span class="menu-title">{{ _t( 'summary' ) }}</span></a></li>
+							{% endif %}
+						</ul>
+					</li>
+					<li class="{% if _is_active_path( url_for( 'project_index' ) ) %}active{% endif %}"><a href="{{ url_for( 'project_index' ) }}"><i class="icon-suitcase"></i> <span class="menu-title">{{ _t( 'projects' ) }}</span></a></li>
+					
+					{% if access('group', group_alias=['administrator','privileged_manager']) %}
+					<li class="{% if _is_active_path( url_for( 'administration_index' ) ) %}active{% endif %}">
+						<a href="{{ url_for( 'administration_index' ) }}"><i class="icon-gears"></i> <span class="menu-title">{{ g._t( 'administration' ) }}</span></a>
+					</li>
+					{% endif %}
+				</ul><!-- /#header-menu-main -->
+				
+				
+				
+				<a id="header-menu-submit-report" class="show-popup add-report-button btn btn-primary" href="{{ url_for( 'report_edit', account_id=g.account.id ) }}">
+					<i class="icon-ok"></i> 
+					<span class="menu-title">{{ g._t( 'submit report' ) }}</span>
+				</a><!-- /#header-menu-submit-report -->
+				
+				
+				
+				<ul id="header-menu-user" class="nav nav-pills pull-right">
+					<li class="highlighted" id="show-help"><a data-toggle="modal" href="#help-message" title="{{ _t('show help') }}"><i class="icon-large icon-question-sign"></i> </a></li>
+					
+					{% if access('is_masquerade') %}
+					<li><a title="{{ g.account }}" href="{{ url_for( 'profile_view', account_id=g.account.id ) }}"><i class="icon-user alert-danger"></i> <span class="menu-title alert-danger">{{ g.account.__str__()|truncate(20, True) }}</span></a></li>
+					<li><a title="{{ _t('back to my account') }}" href="{{ url_for( 'session_signout' ) }}"><i class="icon-signout"></i></a></li>
+					{% else %}
+					<li><a title="{{ g.account }}" href="{{ url_for( 'profile_view', account_id=g.account.id ) }}"><i class="icon-user"></i> <span class="menu-title">{{ g.account.__str__()|truncate(20, True) }}</span></a></li>
+					<li><a title="{{ _t('signout') }}" href="{{ url_for( 'session_signout' ) }}"><i class="icon-signout"></i> <span class="menu-title"></span></a></li>
+					{% endif %}
+					
+				</ul><!-- /#header-menu-user -->
+				
+			</div><!-- /.row -->
+		</div><!-- /.container -->
+	</div><!-- /.navbar-inner -->
+</div><!-- /#header-menu.navbar.navbar-fixed-top -->
+
+
+
+<div id="header-title">
+	<div class="container">
+		<div class="row">
+			<ul class="breadcrumb pull-left">
+				{% if breadcrumbs %}
+				{% for name, href in breadcrumbs %}
+					{% if not href or href == '#' %}
+					<li class="active">{{ name|safe }}</li>
+					{% else %}
+					<li><a href="{{ href }}">{{ name|safe }}</a></li>
+					{% endif %}
+					
+					{% if loop.index != breadcrumbs.__len__() %}
+					<li class="active"> <i class="icon-chevron-right"></i> </li>
+					{% endif %}
+				{% endfor %}
+				{% else %}
+					<li class="active">{{ title|safe }}</li>
+				{% endif %}
+			</ul>
+		</div><!-- /.row -->
+	</div><!-- /.container -->
+</div><!-- /#header-title -->
+<!-- /HEADER REGULAR -->
+
+
+
+<!-- HEADER FIXED TOP -->
+<div class="navbar navbar-fixed-top" id="header-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<div class="row">
+				<ul id="header-fixed-top-title-logo" class="nav pull-left">
+					<li class="">
+						<a title="{{ _t( 'application name' ) }}" class="brand" href="{{ url_for( 'application_index' ) }}">
+							<img style="width:2em; margin:-1em 1em;" class="logo" src="{{ url_for( 'static', filename='images/logo-light.png' ) }}" />
+							<!--
+							<span class="menu-title">
+								<b>{% autoescape off %}{{ _t( 'application title short' ) }}{% endautoescape %}</b>
+							</span>
+							-->
+						</a>
+					</li>
+				</ul>
+				
+				<ul class="breadcrumb pull-left">
+					{% if breadcrumbs %}
+					{% for name, href in breadcrumbs %}
+						{% if not href or href == '#' %}
+						<li class="active">{{ name|safe }}</li>
+						{% else %}
+						<li><a href="{{ href }}">{{ name|safe }}</a></li>
+						{% endif %}
+						
+						{% if loop.index != breadcrumbs.__len__() %}
+						<li class="active"> <i class="icon-chevron-right"></i> </li>
+						{% endif %}
+					{% endfor %}
+					{% else %}
+						<li class="active">{{ title|safe }}</li>
+					{% endif %}
+				</ul>
+				
+				
+				
+				<ul id="header-fixed-top-user" class="nav nav-pills pull-right">
+					<li class="highlighted" id="back-to-top"><a href="javascript:void(0);" class="" onclick="$(window).scrollTop(0);"><i class="icon-large icon-circle-arrow-up"></i> <span class="menu-title">{{ _t('back to top') }}</span></a></li>
+					
+					<li class="highlighted" id="show-help"><a data-toggle="modal" href="#help-message" title="{{ _t('show help') }}"><i class="icon-large icon-question-sign"></i> </a></li>
+					{% if access('is_masquerade') %}
+					<li><a title="{{ g.account }}" href="{{ url_for( 'profile_view', account_id=g.account.id ) }}"><i class="icon-user alert-danger"></i> <span class="menu-title alert-danger">{{ g.account.__str__()|truncate(20, True) }}</span></a></li>
+					<li><a title="{{ _t('back to my account') }}" href="{{ url_for( 'session_signout' ) }}"><i class="icon-signout"></i></a></li>
+					{% else %}
+					<li><a title="{{ g.account }}" href="{{ url_for( 'profile_view', account_id=g.account.id ) }}"><i class="icon-user"></i> <span class="menu-title">{{ g.account.__str__()|truncate(20, True) }}</span></a></li>
+					<li><a title="{{ _t('signout') }}" href="{{ url_for( 'session_signout' ) }}"><i class="icon-signout"></i> <span class="menu-title"></span></a></li>
+					{% endif %}
+				</ul><!-- /#header-fixed-top-user -->
+				
+			</div><!-- /.row -->
+		</div><!-- /.container -->
+	</div><!-- /.navbar-inner -->
+</div><!-- /#header-fixed-top.navbar.navbar-fixed-top -->
+<!-- /HEADER FIXED TOP -->

@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+	<title>{% if title %}{{ title }} | {% endif %}{{ _t( 'application title' ) }}</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link type="image/png" href="{{ url_for( 'static', filename='favicon.png' ) }}" rel="icon"></link>
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='stylesheets/style.css' ) }}"></link>
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='bootstrap/css/bootstrap.min.css' ) }}" media="screen"></link>
+	<!--
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='bootstrap/themes/bootstrap.cosmo.min.css' ) }}" media="screen"></link>
+	-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='bootstrap/css/datepicker.css' ) }}"></link>
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='bootstrap/css/datepicker3.css' ) }}"></link>
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='bootstrap/css/bootstrap-datetimepicker.min.css' ) }}"></link>
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='font-awesome/css/font-awesome.min.css' ) }}"></link>
+	
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/jquery-1.9.1.js' ) }}"></script>
+	<!--
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/jquery-ui-1.10.3.custom.js' ) }}"></script>
+	-->
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/jquery.json.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='bootstrap/js/bootstrap.min.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='bootstrap/js/bootstrap-datepicker.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='bootstrap/js/bootstrap-datetimepicker.min.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='bootstrap/js/bootstrap-typeahead.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/jquery.sortElements.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/excellentexport.min.js' ) }}"></script>
+	
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/date.extend.periods.js' ) }}"></script>
+	
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/interactive.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/feedback.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript">
+TimeTracker.project.resource.URL = "{{ url_for('application_vacation') }}";
+TimeTracker.project.loadResource();
+
+TimeTracker.translations.resource.URL = "{{ url_for('application_translations') }}";
+TimeTracker.translations.loadResource();
+
+TimeTracker.date.resource.URL = "{{ url_for('application_holidays') }}";
+TimeTracker.date.loadResource();
+
+function _t(label) {
+	return TimeTracker.translations.getLabel(label);
+}
+	</script>
+	
+	
+	
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='stylesheets/report.css' ) }}"></link>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/report.js' ) }}"></script>
+</head>
+<body class="{% if g.account %} page-account-authenticated {% else %} page-account-guest {% endif %} page-{{ g.current_page }}" page="{{ g.current_page }}">
+<div id="wrap">
+<div id="wrap-inner">
+
+{% block header %}{% include 'header.html' %}{% endblock %}
+
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			{% for category, message in get_flashed_messages( with_categories=true ) %}
+			<div class="alert alert-{{ category }}">
+				<a class="close" data-dismiss="alert">×</a>
+				{{ message|safe }}
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span12">
+		{% for error in errors %}
+			{% if error.__class__.__name__ in ('list', 'tuple') and error.__len__() == 2 %}
+			<p class="error"><strong>{{ _t(error[0]) }}</strong> {{ _t(error[1]) }}</p>
+			{% else %}
+			<p class="error">{{ _t(error) }}</p>
+			{% endif %}
+		{% endfor %}
+		</div>
+	</div>
+</div>
+
+<div id="help-message" class="modal hide fade in" style="display: none; ">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>{{ _t('help') }}</h3>
+	</div>
+	<div class="modal-body">
+		<p>{{ _help_message()|safe }}</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">{{ _t('close') }}</a>
+	</div>
+</div>
+
+{% if not _isset_preference('language') %}
+<!-- language has not been set for a user, need to show the prompt -->
+<div id="language-preference" class="modal hide fade in" style="display: none; ">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>{{ _t('set language') }}</h3>
+	</div>
+	<div class="modal-body">
+		<p>{{ _t('set language prompt') }}</p>
+		{% for language in _var(scope='translation', name='languages', default='en') %}
+		<a style="display:block;" class="alert alert-info" href="{{ url_for('session_preference', name='language', value=language|json|urlencode) }}">
+			<img src="{{ url_for( 'static', filename='images/flags/'+language+'.png' ) }}" />
+			<span>{{ _t('language:'+language) }}</span>
+		</a>
+		{% endfor %}
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">{{ _t('close') }}</a>
+	</div>
+</div>
+<script type="text/javascript">
+$(function() {
+	setTimeout(function() {
+		$('#language-preference').modal('show');
+	}, 500);
+});
+</script>
+{% elif _get_chinese_cookie() %}
+<!-- chinese cookie has not been shown for a user today, need to show once a day -->
+<div id="chinese-cookie" class="modal hide fade in" style="display: none; ">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>{{ _t('chinese cookie') }}</h3>
+	</div>
+	<div class="modal-body">
+		<p>{{ _t('chinese cookie for today') }}</p>
+		<h3 style="margin-left:1em;"><span class="muted">&laquo;</span> <i>{{ _get_chinese_cookie() }}</i> <span class="muted">&raquo;</span></h3>
+		<img style="margin:0 auto; display:block; height:20em;" src="{{ url_for( 'static', filename='images/chinese-cookie.jpg' ) }}" />
+	</div>
+	<div class="modal-footer">
+		<a href="{{ url_for('session_preference', name='show_chinese_cookie', value=0|json|urlencode) }}">{{ _t('chinese cookie disable') }}</a> | <a href="#" class="btn" data-dismiss="modal">{{ _t('close') }}</a>
+	</div>
+</div>
+<script type="text/javascript">
+$(function() {
+	setTimeout(function() {
+		$('#chinese-cookie').modal('show');
+	}, 500);
+});
+</script>
+{% else %}
+<!-- HERE WE WILL SET THE REST OF PREFERENCES FOR THE FIRST TIME LOGIN -->
+{% endif %}
+
+{% block content %}{% endblock %}
+
+</div><!-- #wrap-inner -->
+</div><!-- #wrap -->
+
+{% block footer %}{% include 'footer.html' %}{% endblock %}
+</body>
+</html>

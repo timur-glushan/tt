@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block header %}{% endblock %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<div class="span3">&nbsp;</div>
+	<div class="span6"><h3>{{ title }} | {{ _t('application name') }}</h3></div>
+	<div class="span3">&nbsp;</div>
+</div><!-- /.row -->
+</div><!-- /.container -->
+	
+<div class="container">
+<div class="row">
+	<div class="span3">&nbsp;</div>
+	<div class="span6">
+		<form accept-charset="UTF-8" action="{{ url_for('session_signin') }}" method="post" class="well">
+		<table width="100%">
+			<tr>
+				<td><input style="width:98%;" placeholder="{{ _t('XMPP login') }}" type="text" name="email" value="{{ request.form.get('email', '') }}" /></td>
+			</tr>
+			<tr>
+				<td><input style="width:98%;" placeholder="{{ _t( 'password' ) }}" type="password" name="password" value="" /></td>
+			</tr>
+			<tr>
+				<td><input style="width:20%;" class="btn btn-primary" type="submit" value="{{ _t('sign in') }}" />
+			</tr>
+		</table>
+		</form>
+	</div>
+	<div class="span3">&nbsp;</div>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

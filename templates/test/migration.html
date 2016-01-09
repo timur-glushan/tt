@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>{{ title }}</title>
+</head>
+<body>
+	<header>
+		<nav>
+			<ul>
+				<li><a href="{{ url_for('test_migration_index') }}">{{ url_for('test_migration_index') }}</a></li>
+				<li><a href="{{ url_for('test_migration_init_db') }}">{{ url_for('test_migration_init_db') }}</a></li>
+				<li><a href="{{ url_for('test_migration_generate_data') }}">{{ url_for('test_migration_generate_data') }}</a></li>
+				<li><a href="{{ url_for('test_migration_exception') }}">{{ url_for('test_migration_exception') }}</a></li>
+			</ul>
+		</nav>
+	</header>
+	<section>
+		<h1>{{ title }}</h1>
+	</section>
+	<section>
+		<pre>{{ data }}</pre>
+	</section>
+	<footer>
+		&copy;Copyright 2014 - none.
+	</footer>
+</body>
+</html>

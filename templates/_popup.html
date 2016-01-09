@@ -1,0 +1,24 @@
+<div id="message-popup" class="modal hide fade in popup-form">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">&times;</a>
+		<h3>{{ title|safe }}</h3>
+	</div>
+	<div class="modal-body">
+		{% if message %}
+		<div class="">
+			<p><strong>{{ message }}</strong></p>
+		</div>
+		{% endif %}
+		{% block content %}{% endblock %}
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn" data-dismiss="modal">{{ _t('close') }}</a>
+	</div>
+	<script type="text/javascript">{% autoescape off %}
+	$('#message-popup').on('hidden', function() {
+		console.log('hidden')
+		{{ javascript }}
+	});
+	{% endautoescape %}</script>
+	<style type="text/css">{% autoescape off %}{{ stylesheet }}{% endautoescape %}</style>
+</div>

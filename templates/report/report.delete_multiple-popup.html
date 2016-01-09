@@ -1,0 +1,42 @@
+<div id="report-form-popup" class="modal hide fade in popup-form">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>{{ title }}</h3>
+	</div>
+	
+	<div class="modal-body">
+		<div class="">
+		{% for error in errors %}
+			<p class="error"><strong>Error:</strong> {{ error }}</p>
+		{% endfor %}
+		</div>
+	</div>
+	
+	<div class="modal-footer">
+		<a href="#" class="btn pull-right" data-dismiss="modal">{{ g._t('cancel') }}</a>
+		
+		<form accept-charset="UTF-8" class="form-inline pull-right" method="POST" action="{{ url_for('report_delete_multiple', account_id=account.id) }}">
+			<input type="hidden" name="csrf_token" value="some_token" />
+			{% for report in reportList %}
+			<input type="hidden" name="report[id]" value="{{ report.id }}" />
+			{% endfor %}
+			<input type="hidden" name="account_id" value="{{ account.id }}" />
+			<input type="hidden" name="action" value="report_action_delete" />
+			
+			<input type="submit" class="btn btn-danger" value="{{ g._t( 'confirm:delete' ) }}" />
+		</form>
+		
+		{% if access('report', action='delete') %}
+		<form accept-charset="UTF-8" class="form-inline pull-right" method="POST" action="{{ url_for('report_delete_multiple', account_id=account.id) }}">
+			<input type="hidden" name="csrf_token" value="some_token" />
+			{% for report in reportList %}
+			<input type="hidden" name="report[id]" value="{{ report.id }}" />
+			{% endfor %}
+			<input type="hidden" name="account_id" value="{{ account.id }}" />
+			<input type="hidden" name="action" value="report_action_remove_permanently" />
+			
+			<input type="submit" class="btn btn-danger" value="{{ g._t( 'confirm:remove permanently' ) }}" />
+		</form>
+		{% endif %}
+	</div>
+</div>

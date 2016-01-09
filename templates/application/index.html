@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+	<h2>Welcome</h2>
+	<p><strong>{{ g.application_name }}</strong> is an app to store and manage the site activity</p>
+	<h2>Getting started</h2>
+	<ul class="getting_started">
+		{% if not g.account %}
+		<li><a href="{{ url_for( 'session_signup' ) }}">Request an account</a></li>
+		<li>Manage your profile</li>
+		{% else %}
+		<li>Register - done</li>
+		<li><a href="{{ url_for( 'profile_index' ) }}">Manage your profile</a></li>
+		{% endif %}
+	</ul>
+{% endblock %}
+
+{% block panel %}
+<form action="{{ url_for( 'session_signin' ) }}" method="post" class="well">
+<h4>Have an account?</h4>
+<table width="100%">
+	<tr>
+		<td><input placeholder="{{ g._t( 'XMPP login' ) }}" type="text" name="email" value="{{ request.form.get( 'email', '') }}" /></td>
+	</tr>
+	<tr>
+		<td><input placeholder="{{ g._t( 'password' ) }}" type="password" name="password" value="" /></td>
+	</tr>
+	<tr>
+		<td><input class="btn-success" type="submit" value="{{ g._t( 'sign in' ) }}" />
+	</tr>
+</table>
+</form>
+{% endblock %}

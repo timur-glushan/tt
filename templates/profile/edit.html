@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+	{% if account and account.id  %}
+		{% if access('profile', action='update', account=account) %}
+		<li class="{% if _is_active_path(url_for('profile_edit', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_edit', account_id=account.id.__str__()|urlencode) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-edit"></i> {{ _t( 'edit profile' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-edit"></i> {{ _t( 'edit profile' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		
+		<li class="{% if _is_active_path(url_for('profile_preferences', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_preferences', account_id=account.id.__str__()|urlencode) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-gear"></i> {{ _t( 'profile preferences' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-gear"></i> {{ _t( 'profile preferences' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		
+		{% if access('activity', account=employee) %}
+		<li class="">
+			<a href="{{ url_for('report_index', account_id=account.id.__str__()|urlencode) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-time"></i> {{ _t( 'reports' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-time"></i> {{ _t( 'reports' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if access('masquerade', account=account) %}
+		<li class="{% if _is_active_path(url_for('session_masquerade', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('session_masquerade', account_id=account.id.__str__()|urlencode) }}">
+				<span class="alert-info"><i class="icon-exclamation-sign"></i> <i class="icon-user"></i> {{ _t('masquerade') }}</span>
+			</a>
+		</li>
+		{% endif %}
+		
+		<li class="{% if _is_active_path(url_for('profile_password', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_password', account_id=account.id.__str__()|urlencode) }}">
+				{% if account.id == g.account.id %}
+					<span><i class="icon-edit"></i> {{ _t( 'set password' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-edit"></i> {{ _t( 'set password' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if access('profile', action='update', account=account) %}
+		<li class="{% if _is_active_path(url_for('profile_delete', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_delete', account_id=account.id.__str__()|urlencode) }}">
+				{% if account.id == g.account.id %}
+					<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t( 'delete' ) }}</span>
+				{% else %}
+					<span class="alert alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-trash"></i> {{ _t( 'delete' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+	{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<form accept-charset="UTF-8" method="POST" action="{{ url_for('profile_edit', account_id=account_id) }}" name="profile-edit-form" class="well">
+		<input type="hidden" name="csrf_token" value="some_token" />
+		<input type="hidden" name="account_id" value="{{ account.id or '' }}" />
+		
+		
+		
+		<div class="input-group">
+			<label>{{ _t('profile alias') }}</label>
+			<input type="text" name="account_alias" value="{{ account.alias or '' }}" placeholder="{{ _t('alias') }}" />
+		</div>
+		<div class="input-group">
+			<label>{{ _t('profile name') }}</label>
+			<input type="text" name="account_first_name" value="{{ account.first_name or '' }}" class="form-control" placeholder="{{ _t('first name') }}" />
+			<input type="text" name="account_last_name" value="{{ account.last_name or '' }}" class="form-control" placeholder="{{ _t('last name') }}" />
+		</div>
+		<div class="input-group">
+			<label>{{ _t('profile email') }}</label>
+			<input type="text" name="account_email" value="{{ account.email or '' }}" placeholder="{{ _t('email') }}" />
+		</div>
+		
+		<input type="hidden" name="account_status_check_value" value="{{ account.status }}" />
+		{% if access('profile', action='delete', account=account) %}
+		<div class="input-group">
+			<label for="account_status">{{ _t('status') }}</label>
+			<select name="account_status">
+				<option value="{{ account.STATUS_ACTIVE }}">{{ _t('active') }}</option>
+				<option value="{{ account.STATUS_DELETED }}" {% if account.hasStatus(account.STATUS_DELETED) %}selected{% endif %}>{{ _t('deleted') }}</option>
+			</select>
+		</div>
+		{% else %}
+		<input type="hidden" name="account_status" value="{{ account.status }}" />
+		{% endif %}
+		
+		<div class="input-group">
+			<label>{{ _t('profile info') }}</label>
+			<textarea name="account_info" style="width:99%; height:12em;">{{ account.info or '' }}</textarea>
+		</div>
+		
+		{% if access('profile', action='administer') %}
+		<div class="input-group">
+			<label>{{ _t('profile group') }}</label>
+			<select name="account_group_id">
+				{% for group in groupList %}
+				<option value="{{ group.id }}" {% if account.group_id and group.id==account.group_id %}selected="selected"{% endif%}>{{ group.__str__() }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		{% endif %}
+		
+		<input type="submit" value="{{ _t('submit') }}" class="btn btn-primary" />
+		{% if account_id %}
+		<a href="{{ url_for('profile_view', account_id=account_id ) }}" class="btn btn-danger">{{ _t('cancel') }}</a>
+		{% else %}
+		<a href="{{ url_for('profile_employees' ) }}" class="btn btn-danger">{{ _t('cancel') }}</a>
+		{% endif%}
+	</form>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

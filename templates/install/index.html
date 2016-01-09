@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Install</title>
+	
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='bootstrap/css/bootstrap.min.css' ) }}" media="screen"></link>
+	<link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='font-awesome/css/font-awesome.min.css' ) }}"></link>
+	
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='javascripts/jquery-1.9.1.js' ) }}"></script>
+	<script charset="UTF-8" type="text/javascript" src="{{ url_for( 'static', filename='bootstrap/js/bootstrap.min.js' ) }}"></script>
+</head>
+<body>
+<div class="container">
+<div class="row">
+	<h2>Welcome to the Application Install and Update Page</h2>
+	
+	<form class="well" action="{{ url_for('install_process') }}" accept-charset="UTF-8" method="POST">
+		<input type="hidden" name="csrf_token" value="token" />
+		<h3>Ready to install</h3>
+		<input class="btn btn-primary" type="submit" value="Install" />
+	</form>
+	
+	<form class="well" action="{{ url_for('update_process') }}" accept-charset="UTF-8" method="POST">
+		<input type="hidden" name="csrf_token" value="token" />
+		<h3>Update to version</h3>
+		<input type="text" name="version" value="{{ config['VERSION'].__str__() }}" />
+		<br/>
+		<input class="btn btn-primary" type="submit" value="Update" />
+	</form>
+</div>
+</div>
+</body>
+</html>

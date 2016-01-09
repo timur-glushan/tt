@@ -1,0 +1,5 @@
+{% if access('authenticated') %}
+	{% include '_header.authenticated.html' %}
+{% else %}
+	{% include '_header.guest.html' %}
+{% endif %}

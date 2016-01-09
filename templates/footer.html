@@ -1,0 +1,11 @@
+<div id="footer">
+	<div class="container">
+		<div class="row">
+			<br/>
+			<span>{{ _t( 'copyright' ) }}{{ g._constant()['DATE']['TODAY'].split('-')[0] }}</span>
+			
+			<a style="padding-left:1em;" class="show-popup pull-right" href="{{ url_for('application_about') }}"><i class="icon-large icon-question-sign"></i> {{ _t('about service')|safe }}</a>
+			<a style="padding-left:1em;" class="show-popup submit-feedback pull-right" href="{{ url_for('feedback_submit') }}"><i class="icon-envelope-alt"></i> <span class="menu-title">{{ g._t('feedback') }}</span></a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,359 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<div class="row" id="filter-form">
+		<form accept-charset="UTF-8" action="{{ url_for('activity_statistics', account_id=account.id) }}" method="POST" name="statistics-form">
+		</form>
+		
+		<form accept-charset="UTF-8" action="{{ url_for('activity_data') }}" method="POST" name="filter-form">
+			<input type="hidden" name="filter-enabled" value="true" />
+			
+			<input type="hidden" name="filter[employee]" value="{{ account.id }}" />
+			
+			<div class="span12">
+				<div class="control-group pull-left">
+					<div class="input-append date">
+						<input readonly style="width:6em;" name="start_date" data-format="yyyy-MM-dd" type="text" />
+						<span class="add-on">
+							<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+						</span>
+					</div>
+			
+					<div class="input-append date">
+						<input readonly style="width:6em;" name="end_date" data-format="yyyy-MM-dd" type="text" />
+						<span class="add-on">
+							<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+						</span>
+					</div>
+				</div>
+			
+				<div class="pull-left" style="margin:0 1em;">&nbsp;</div>
+			
+				<div class="btn-group pull-left">
+					<button class="btn"><span for="filter[project]" title="{{ _t('projects') }}"></span></button>
+					<button class="btn dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul id="projects-values" class="dropdown-menu">
+						<li>
+							<input type="text" id="projects-search" value="" autocomplete="off" placeholder="{{ _t('search projects') }}" />
+						</li>
+					</ul>
+				</div>
+			
+				<div class="pull-left" style="margin:0 1em;">&nbsp;</div>
+			
+				<div class="control-group pull-left">
+					{{ _t('time format') }}: 
+					<select style="width:6em;" name="filter[format]">
+						<option value="float" {% if _get_preference('report_time_format') == 'float' %}selected{% endif %}>{{ _t('float') }}</option>
+						<option value="hours" {% if _get_preference('report_time_format') == 'hours' %}selected{% endif %}>{{ _t('hours') }}</option>
+					</select>
+				</div>
+
+				<div class="pull-left" style="margin:0 1em;">&nbsp;</div>
+
+				<div class="control-group pull-left">
+					{{ _t('floats format') }}:
+					<select style="width:6em;" name="filter[floats]">
+						<option value="," {% if _get_preference('floats_format') == ',' %}selected{% endif %}>{{ _t('comma') }}</option>
+						<option value="." {% if _get_preference('floats_format') == '.' %}selected{% endif %}>{{ _t('dot') }}</option>
+					</select>
+				</div>
+			
+				{% if access('report', action='delete') %}
+				<div class="pull-left" style="margin:0 1em;">&nbsp;</div>
+			
+				<div class="control-group pull-left">
+					{{ _t('deleted') }}: 
+					<select style="width:6em;" name="filter[show_deleted]">
+						<option value="0" {% if _get_preference('show_deleted_reports') == 0 %}selected{% endif %}>{{ _t('hide') }}</option>
+						<option value="1" {% if _get_preference('show_deleted_reports') == 1 %}selected{% endif %}>{{ _t('show') }}</option>
+					</select>
+				</div>
+				{% endif %}
+			
+				<div class="pull-left" style="margin:0 1em;">&nbsp;</div>
+			
+				<div class="btn-group pull-left">
+					<input id="update-report-filter" class="btn btn-primary" type="submit" value="{{ _t('filter') }}" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<script charset="UTF-8" type="text/javascript">
+if (typeof window.TimeTracker === 'undefined') TimeTracker = {};
+
+/*
+ * Indicate the filters changed and set default when they are reset
+ */
+TimeTracker.updateFilterStatus = function() {
+	if (typeof TimeTracker.reportsFilterTimeout !== 'undefined' && TimeTracker.reportsFilterTimeout) {
+		clearTimeout(TimeTracker.reportsFilterTimeout);
+	}
+	var valueList = {};
+	var filterNameList = ['filter[employee]', 'filter[project]'];
+	for (var i=0; i<filterNameList.length; i++) {
+		valueList[filterNameList[i]] = [];
+		var valueHTML;
+		$('[name="'+filterNameList[i]+'"]').each( function () {
+			valueList[filterNameList[i]].push($(this).parents('li').text());
+		} );
+		if (valueList[filterNameList[i]].length>0) {
+			valueHTML = valueList[filterNameList[i]].join(', ');
+			if (valueHTML.length > 15) {
+				valueHTML = valueHTML.substr(0,10)+'... ('+valueList[filterNameList[i]].length+')';
+			}
+		} else {
+			valueHTML = '<span class="muted">'+$('[for="'+filterNameList[i]+'"]').attr('title')+'</span>';
+		}
+		$('[for="'+filterNameList[i]+'"]').html(valueHTML);
+	}
+	
+	valueList['period'] = $('[name=period]').val();
+	
+	// if the filters have been changed
+	if (typeof TimeTracker.reportsFilter !== 'undefined' && TimeTracker.reportsFilter != $('[name=filter-form]').serialize()) {
+		TimeTracker.reportsFilterTimeout = setTimeout( function() {
+			$('form[name=filter-form] input[type=submit]').click();
+		}, 500 );
+	}
+	TimeTracker.reportsFilter = $('[name=filter-form]').serialize();
+}
+
+/*
+ * prevent the filter dropdowns hiding after a checkbox has been clicked
+ */
+$('[name=filter-form] .dropdown-menu *, [name=filter-form] .dropdown-menu input, [name=filter-form] .dropdown-menu label').click(function(e) {
+	e.stopPropagation();
+});
+
+$(function() {
+	/*
+	 * initiate the time format: hours or float
+	 */
+	$('[name="filter[format]"]').change(function(e) {
+		var timeFormat = $('[name="filter[format]"]').val();
+		TimeTracker.preferences.set('time', timeFormat);
+		TimeTracker.time.displayHours();
+	});
+	// set the initial reports-time-format value from preferences
+	var timeFormat = $('[name="filter[format]"]').val();
+	TimeTracker.preferences.set('time', timeFormat);
+	// the line below is commented because .displayHours is called few lines lower
+	// TimeTracker.time.displayHours();
+
+	/*
+	 * initiate the floats delimiter format: comma or dot
+	 */
+	$('[name="filter[floats]"]').change(function(e) {
+		var floatsFormat = $('[name="filter[floats]"]').val();
+		TimeTracker.preferences.set('floats', floatsFormat);
+		TimeTracker.time.displayHours();
+	});
+	// set the initial reports-floats-format value from preferences
+	var floatsFormat = $('[name="filter[floats]"]').val();
+	TimeTracker.preferences.set('floats', floatsFormat);
+
+	// Initiate the time display considering the defined time and formats formats
+	TimeTracker.time.displayHours();
+
+
+
+	/*
+	 * initiate the flag SHOW_DELETED for the reports
+	 */
+	$('[name="filter[show_deleted]"]').change(function(e) {
+		var showDeletedReportsFlag = $('[name="filter[show_deleted]"]').val() == '1';
+		TimeTracker.report.setFlag('SHOW_DELETED', showDeletedReportsFlag);
+		//$('[name=filter-form]').submit();
+		TimeTracker.updateFilterStatus();
+	});
+	// set the initial show-deleted-reports value from preferences
+	var showDeletedReportsFlag = $('[name="filter[show_deleted]"]').val() == '1';
+	TimeTracker.report.setFlag('SHOW_DELETED', showDeletedReportsFlag);
+	
+	TimeTracker.updateFilterStatus();
+	
+	
+	
+	/*
+	 * Filter form - AJAX initializer 
+	$('form[name=filter-form]').submit(function(e){
+		e.preventDefault();
+		$('#update-report-filter').addClass('processing'); 
+		$('#content-section').css({'position':'relative'});
+		$('#content-section').prepend('<div id="content-section-overlay">&nbsp;</div>');
+		$.get($(this).attr('action'), $(this).serialize(), function(response){
+			$('#content-section').replaceWith(response);
+			$('#update-report-filter').removeClass('processing'); 
+		});
+		return false;
+	});
+	 */
+	
+	/*
+	 * initialize the typeahead (autocomplete) on the projects filter field
+	*/
+	// READ https://github.com/tcrosen/twitter-bootstrap-typeahead
+	$('#projects-search').typeahead({
+		source: [
+			{% for component in header['projects'] %}
+			{% autoescape off %}{{ "{ id:'%s', name:'%s' }, " % (component.id, component.path) }}{% endautoescape %}
+			{% endfor %} { id:'', name:'NONE' }
+		],
+		display: 'name',
+		val: 'id',
+		itemSelected: function(item, val, text) {
+			//alert('You selected ' + val + ': ' + text + '!');
+			$('#projects-search').val('');
+			$('#projects-values').append('<li class="value-box"><input type="hidden" name="filter[project]" value="'+val+'"><span>'+text+'<a class="pull-right" href="javascript:void(0);" onclick="$(this).parents(\'.value-box\').remove(); TimeTracker.updateFilterStatus();"><i class="icon-large icon-remove"></i></a></span></li>');
+			//TimeTracker.updateFilterStatus();
+		}
+	});
+	
+	// Auto submit on the dropdown close
+	$(document).mouseup(function() {
+		setTimeout(function() {
+		if ($('#projects-search').parents('.btn-group.open').length) {
+			if (!$('#projects-search').parents('.btn-group.open').is('.expanded')) {
+				$('#projects-search').parents('.btn-group.open').addClass('expanded');
+			}
+		}
+		if ($('#projects-search').parents('.btn-group.expanded').length) {
+			if (!$('#projects-search').parents('.btn-group.expanded').is('.open')) {
+				$('#projects-search').parents('.btn-group.expanded').removeClass('expanded');
+				TimeTracker.updateFilterStatus();
+			}
+		}
+		}, 0);
+	});
+	
+	/*
+	 * initialize the typeahead (autocomplete) on the employees filter field
+	// READ https://github.com/tcrosen/twitter-bootstrap-typeahead
+	$('#employees-search').typeahead({
+		source: [
+			{% for account in header['employees'] %}
+			{% autoescape off %}{{ "{ id:'%s', name:'%s' }, " % (account.id, account.alias) }}{% endautoescape %}
+			{% endfor %} { id:'', name:'NONE' }
+		],
+		display: 'name',
+		val: 'id',
+		itemSelected: function(item, val, text) {
+			//alert('You selected ' + val + ': ' + text + '!');
+			$('#employees-search').val('');
+			$('#employees-values').append('<li class="value-box"><input type="hidden" name="filter[employee]" value="'+val+'"><span>'+text+'<a class="pull-right" href="javascript:void(0);" onclick="$(this).parents(\'.value-box\').remove(); TimeTracker.updateFilterStatus();"><i class="icon-large icon-remove"></i></a></span></li>');
+			//TimeTracker.updateFilterStatus();
+		}
+	});
+	
+	// Auto submit on the dropdown close
+	$(document).mouseup(function() {
+		setTimeout(function() {
+		if ($('#employees-search').parents('.btn-group.open').length) {
+			if (!$('#employees-search').parents('.btn-group.open').is('.expanded')) {
+				$('#employees-search').parents('.btn-group.open').addClass('expanded');
+			}
+		}
+		if ($('#employees-search').parents('.btn-group.expanded').length) {
+			if (!$('#employees-search').parents('.btn-group.expanded').is('.open')) {
+				$('#employees-search').parents('.btn-group.expanded').removeClass('expanded');
+				TimeTracker.updateFilterStatus();
+			}
+		}
+		}, 0);
+	});
+	*/
+	
+	
+	
+	/*
+	 * Initiate the date pickers
+	*/
+	var date = new Date();
+	 
+	$('input[name=start_date]').parents('.date').datetimepicker({
+		pickTime: false,
+		weekStart: 1
+	}).on('changeDate', function(e) {
+		TimeTracker.updateFilterStatus();
+	}).data('datetimepicker').setLocalDate(new Date(date.getFullYear(), date.getMonth(), 1));
+	
+	$('input[name=end_date]').parents('.date').datetimepicker({
+		pickTime: false,
+		weekStart: 1
+	}).on('changeDate', function(e) {
+		TimeTracker.updateFilterStatus();
+	}).data('datetimepicker').setLocalDate(date.calculateLastMidnight());
+	
+	
+	
+	// initialte the report selection toggle
+	$('#reports-select-all').click(function(e) {
+		e.preventDefault();
+		
+		var toggle = $(this).attr('toggle') == '1';
+		
+		$('form[name=report-delete-multiple-form] [name="report[id]"]').each(function() {
+			// if the checkbox:checked flag equals the "selected" flag, we do the click to invert to the new flag state
+			if ($(this).is(':checked') === toggle) { $(this).click(); }
+		});
+		
+		// invert the "selected" flag
+		$(this).attr('toggle', String(Number(!toggle)));
+		
+		return false;
+	});
+	
+	$(document).on('click', 'form[name=report-delete-multiple-form] [name="report[id]"]', function(e) {
+		$(this).parents('.alert').toggleClass('selected-report');
+	});
+	
+	$('#reports-delete-multiple').mousedown(function(e) {
+		e.preventDefault();
+		
+		var href = $('form[name=report-delete-multiple-form]').attr('action');
+		var formData = $('form[name=report-delete-multiple-form]').serialize();
+		$(this).attr('href', href+'?'+formData);
+		
+		return false;
+	});
+});
+
+
+
+TimeTracker.controllers.ReportIndex();
+	</script>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+<div class="container" id="dashboard-section">
+<div class="row" id="dashboard">
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+<div class="container" id="actions-section">
+<div class="row" id="actions">
+<br/>
+<ul class="nav nav-pills pull-right">
+	{% if access('report', action='create') and access('activity', account=account) %}
+	<li><a class="show-popup alert alert-info" href="{{ url_for('report_edit', account_id=account.id) }}">{{ _t('submit report') }}</a></li>
+	{% endif %}
+	
+	{% if access('activity', account=account) %}
+	<li><a id="reports-select-all" class="" href="javascript:void(0);">{{ _t('toggle selection') }}</a></li>
+	<li><a id="reports-delete-multiple" class="show-popup alert alert-danger" href="javascript:void(0);">{{ _t('delete selected') }}</a></li>
+	{% endif %}
+</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+<form name="report-delete-multiple-form" action="{{ url_for('report_delete_multiple', account_id=account.id) }}" method="POST">
+<div class="container" id="content-section">
+<div class="row" id="content">
+</div><!-- /.row -->
+</div><!-- /.container -->
+</form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% if not request.is_ajax %}{% extends "layout.html" %}{% endif %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<div class="well">
+		<form accept-charset="UTF-8" class="form-inline pull-right" method="POST" action="{{ url_for( 'report_delete', account_id=account.id, report_id=report.id ) }}">
+			<input type="hidden" name="csrf_token" value="some_token" />
+			<input type="hidden" name="report_id" value="{{ report.id }}" />
+			<input type="hidden" name="account_id" value="{{ account.id }}" />
+			<input type="hidden" name="action" value="report_action_delete" />
+			
+			<input type="submit" class="btn btn-danger" value="{{ g._t( 'confirm:delete' ) }}" />
+		</form>
+	
+		{% if access('report', action='delete', report=report) %}
+		<form accept-charset="UTF-8" class="form-inline pull-right" method="POST" action="{{ url_for( 'report_delete', account_id=account.id, report_id=report.id ) }}">
+			<input type="hidden" name="csrf_token" value="some_token" />
+			<input type="hidden" name="report_id" value="{{ report.id }}" />
+			<input type="hidden" name="account_id" value="{{ account.id }}" />
+			<input type="hidden" name="action" value="report_action_remove_permanently" />
+		
+			<input type="submit" class="btn btn-danger" value="{{ g._t( 'confirm:remove permanently' ) }}" />
+		</form>
+		{% endif %}
+		
+		<a href="{{ url_for('report_index', account_id=account.id) }}" class="btn pull-right">{{ g._t( 'cancel' ) }}</a>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

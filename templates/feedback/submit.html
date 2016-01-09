@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<form accept-charset="UTF-8" name="feedback-form" method="POST" action="{{ url_for('feedback_submit') }}" class="well form-inline">
+		<input type="hidden" name="csrf_token" value="some_token" />
+		<div class="">
+			<div class="">
+			{% for error in errors %}
+				<p class="error"><strong>Error:</strong> {{ error }}</p>
+			{% endfor %}
+			</div>
+			<label for="feedback_subject">{{ g._t('subject') }}</label> 
+			<select name="feedback_subject">
+				<option value="feature">{{ g._t('feature request') }}</option>
+				<option value="performance">{{ g._t('performance') }}</option>
+				<option value="bug">{{ g._t('bug') }}</option>
+				<option value="general">{{ g._t('general') }}</option>
+			</select>
+			<br/>
+			<br/>
+			<textarea style="width:95%; height:10em;" class="form-control" name="feedback_message" placeholder="{{ g._t('message') }}"></textarea>
+		</div>
+		<div class="">
+			<input type="submit" class="btn btn-primary" value="{{ g._t('submit') }}">
+			<a href="{{ url_for('application_index') }}" class="btn btn-danger">{{ g._t('cancel') }}</a>
+		</div>
+	</form>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

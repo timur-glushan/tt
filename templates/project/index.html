@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	{% if access('project', action='create') %}
+	<a class="btn pull-right" href="{{ url_for( 'project_edit' ) }}" title="{{ _t('add project') }}"><i class="icon-plus"></i><span class="menu-title">{{ _t('add project') }}</span></a>
+	{% endif %}
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th width="15%">{{ _t('alias') }}</th>
+				<th width="25%">{{ _t('title') }}</th>
+				<th width="35%">{{ _t('info') }}</th>
+				<th width="10%">{{ _t('your role') }}</th>
+				<th width="15%">{{ _t('actions') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for project in projectList %}
+			<tr>
+				<td>{{ project.__str__() }}</td>
+				<td>
+				{% if access('project', action='read', project=project) %}
+					<a href="{{ url_for('project_view', project_id=project.id.__str__()|urlencode) }}">{{ (project.title or '')|truncate(40, True) }}</a>
+				{% else %}
+					{{ (project.title or '')|truncate(40, True) }}
+				{% endif %}
+				</td>
+				<td>{{ (project.info or '')|truncate(100, True) }}</td>
+				<td>
+				{% for member in project.members %}
+					{% if member.account == g.account %}
+						{{ member.role.__str__() }}
+					{% endif %}
+				{% endfor %}
+				</td>
+				<td>
+				{% if access('project', action='update', project=project) %}
+					<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}" title="{{ _t('edit') }}"><i class="icon-edit"></i> {{ _t('edit') }}</a> | 
+				{% endif %}
+				{% if access('project', action='update', project=project) %}
+					<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}" title="{{ _t('delete') }}"><i class="icon-remove"></i> {{ _t('delete') }}</a>
+				{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

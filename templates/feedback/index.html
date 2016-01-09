@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>{{ _t('created') }}</th>
+				<th>{{ _t('modified') }}</th>
+				<th>{{ _t('employee') }}</th>
+				<th>{{ _t('subject') }}</th>
+				<th>{{ _t('message') }}</th>
+				<th style="width:6em;">{{ _t('actions') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for feedback in feedbackList %}
+			<tr id="feedback-id-{{ feedback.id }}">
+				<td>{{ feedback.created and _date(feedback.created) or '' }}</td>
+				<td>{{ feedback.modified and _date(feedback.modified) or '' }}</td>
+				<td>{{ feedback.employee or '' }}</td>
+				<td>{{ feedback.subject or '' }}</td>
+				<td>{% autoescape off %}{{ feedback.message.replace("\n", "<br/>") or '' }}{% endautoescape %}</td>
+				<td>
+					<a href="{{ url_for( 'feedback_delete', feedback_id=feedback.id ) }}" title="{{ g._t('delete') }}""><i class="icon-remove"></i> {{ g._t('delete') }}</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<ul class="nav nav-pills">
+		<li><a href="{{ url_for( 'project_edit' ) }}">{{ g._t('add project') }}</a></li>
+	</ul>
+	
+	<h3>{{ title }}</h3>
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th>{{ _t('ID') }}</th>
+				<th>{{ _t('title') }}</th>
+				<th>{{ _t('description') }}</th>
+				<th>&nbsp;</th>
+				<th style="width:8em;">{{ _t('actions') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for project in projectList %}
+			<tr>
+				<td>{{ project.id }}</td>
+				<td>{{ project }}</td>
+				<td>{{ project.description or '' }}</td>
+				<td>
+				{% if not access('authenticated', account=account) %}
+					{% if access('activity',account=account) and access('report', action='create') %}
+					<a title="{{ g._t( 'submit report' ) }} {{ _t('on') }} {{ project }}: {{ account }}" class="add-report-button btn btn-danger" style="color:#fff; font-weight:normal; text-shadow:none;" href="{{ url_for( 'report_edit', account_id=account.id, report_project=project.id|urlencode, no_validate=1 ) }}"><i class="icon-exclamation-sign"></i> <i class="icon-paperclip"></i> {{ g._t( 'submit report' ) }} {{ _t('on') }} {{ project }}</a>
+					{% endif %}
+				{% else %}
+					{% if access('activity', account=account) and access('report', action='create') %}
+					<a class="add-report-button btn btn-primary" href="{{ url_for( 'report_edit', account_id=g.account.id, report_project=project.id|urlencode, no_validate=1 ) }}"><i class="icon-paperclip"></i> {{ g._t( 'submit report' ) }} {{ _t('on') }} {{ project }}</a>
+					{% endif %}
+				{% endif %}
+				</td>
+				<td>
+					{% if access('project', action='read', project=project) %}
+					<a href="{{ url_for( 'project_membership_details', account_id=account.id|urlencode, project_id=project.id|urlencode ) }}" title="{{ _t( 'view' ) }}"><i class="icon-eye-open"></i> {{ _t('view') }}</a>&nbsp;&nbsp;
+					{% endif %}
+					
+					{% if access('project', action='update', project=project) %}
+					<a href="{{ url_for( 'project_edit', project_id=project.id|urlencode ) }}" title="{{ g._t( 'edit' ) }}"><i class="icon-edit"></i> {{ _t('edit') }}</a>
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

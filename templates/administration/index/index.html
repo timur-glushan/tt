@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<div class="span6">
+		{% if access('group', group_alias=['administrator']) %}
+		<h4>{{ g._t( 'variables' ) }}</h4>
+		<a href="{{ url_for('variable_index') }}">{{ g._t('manage variables') }}</a>
+		<br/>
+		<a href="{{ url_for('variable_add') }}"><i class="icon-plus"></i> {{ _t('add variable') }}</a>
+		<br/>
+		<h4>{{ g._t( 'translations' ) }}</h4>
+		<a href="{{ url_for('translation_index') }}">{{ g._t('manage translations') }}</a>
+		<br/>
+		<a href="{{ url_for('translation_add') }}"><i class="icon-plus"></i> {{ _t('add translation') }}</a>
+		<br/>
+		<h4><i class="icon-envelope"></i> {{ g._t('feedback') }}</h4>
+		<a href="{{ url_for('feedback_index') }}">{{ g._t('feedback') }}</a>
+		<br/>
+		{% endif %}
+	</div>
+	<div class="span6">
+		{% if access('group', group_alias=['administrator','privileged_manager']) %}
+		<h4><i class="icon-suitcase"></i> {{ g._t('projects') }}</h4>
+		<a href="{{ url_for('project_index') }}">{{ g._t('projects') }}</a> 
+		<br/>
+		<a href="{{ url_for('project_edit') }}" title="{{ _t('add project') }}"><i class="icon-plus"></i> {{ _t('add project') }}</a>
+		<br/>
+		<h4><i class="icon-group"></i> {{ g._t('employees') }}</h4>
+		<a href="{{ url_for('profile_employees') }}">{{ g._t('employees') }}</a>
+		<br/>
+		<a href="{{ url_for('profile_edit') }}" title="{{ _t('new profile') }}"><i class="icon-plus"></i> {{ _t('new profile') }}</a>
+		<br/>
+		{% endif %}
+	</div>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

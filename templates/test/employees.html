@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<form method="POST" class="well">
+		<label for="filter_value">Filter Key:</label>
+		<input type="text" name="filter_key" value="{{ request.values.get('filter_key', 'email') }}" />
+		<br/>
+		<label for="filter_value">Filter Value:</label>
+		<input type="text" name="filter_value" value="{{ request.values.get('filter_value', '') }}" />
+		<br/>
+		<input type="submit" value="Query" class="btn btn-primary" />
+	</form>
+</div>
+
+<div class="row">
+	{{ data }}
+</div>
+</div>
+{% endblock %}

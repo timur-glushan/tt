@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<form accept-charset="UTF-8" class="well" method="POST">
+		<input type="hidden" name="csrf_token" value="token">
+		<div class="pull-left">
+			<label for="variable_scope">{{ _t('scope') }}</label>
+			<input type="text" name="variable_scope" value="{{ variable.scope or '' }}">
+		</div>
+		<div class="pull-left">
+			<label for="variable_name">{{ _t('name') }}</label>
+			<input type="text" name="variable_name" value="{{ variable.name or '' }}">
+		</div>
+		<div style="clear:both;">
+			<label for="variable_raw_value">{{ _t('value') }}</label>
+			<textarea style="width:99%; height:5em;" name="variable_raw_value">{{ variable.raw_value or '' }}</textarea>
+		</div>
+		<div class="pull-right">
+			<button type="submit" class="btn btn-primary">{{ _t('save') }}</button>
+			<a class="btn btn-danger" href="{{ url_for( 'variable_index' ) }}">{{ _t('cancel') }}</a>
+		</div>
+		<br/>
+	</form>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

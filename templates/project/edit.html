@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<ul class="nav nav-pills">
+		{% if project.id and access('project', action='update', project=project) %}
+		<li>
+			<a href="{{ url_for( 'project_view', project_id=project.id.__str__()|urlencode ) }}">
+				<span>{{ project.__str__() }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}">
+				<span><i class="icon-edit"></i> {{ _t('edit this project') }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}">
+				<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t('delete this project') }}</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+<div class="container">
+<div class="row">
+	<form accept-charset="UTF-8" name="project-form" class="well" method="POST" action="{{ url_for('project_edit', project_id=project_id) }}">
+		<input type="hidden" name="csrf_token" value="some_token" />
+		<input type="hidden" name="project_id" value="{{ project.id or '' }}" />
+		
+		
+		
+		<label for="project_alias">{{ _t('alias') }}</label>
+		<input type="text" name="project_alias" value="{{ project.alias or '' }}" style="width:99%;" />
+		
+		<label for="project_title">{{ _t('title') }}</label>
+		<input type="text" name="project_title" value="{{ project.title or '' }}" style="width:99%;" />
+		
+		<input type="hidden" name="project_status_check_value" value="{{ project.status }}" />
+		{% if access('project', action='delete', project=project) %}
+		<label for="project_status">{{ _t('status') }}</label>
+		<select name="project_status">
+			<option value="{{ project.STATUS_ACTIVE }}">{{ _t('active') }}</option>
+			<option value="{{ project.STATUS_DELETED }}" {% if project.hasStatus(project.STATUS_DELETED) %}selected{% endif %}>{{ _t('deleted') }}</option>
+		</select>
+		{% else %}
+		<input type="hidden" name="project_status" value="{{ project.status }}" />
+		{% endif %}
+		
+		<label for="project_info">{{ _t('info') }}</label>
+		<textarea name="project_info" style="width:99%; height:12em;">{{ project.info or '' }}</textarea>
+		
+		<br/>
+		
+		<input type="submit" value="{{ _t('submit') }}" class="btn btn-primary" />
+		{% if project_document_id %}
+		<a href="{{ url_for('project_view', project_id=project_document_id|urlencode) }}" class="btn btn-danger">{{ _t( 'cancel' ) }}</a>
+		{% else %}
+		<a href="{{ url_for('project_index') }}" class="btn btn-danger">{{ _t( 'cancel' ) }}</a>
+		{% endif %}
+	</form>
+	
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

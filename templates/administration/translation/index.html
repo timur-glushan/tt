@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<a href="{{ url_for('translation_add') }}">{{ _t('add translation') }}</a>
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th>{{ _t('name') }}</th>
+				{% for language in localeList %}
+				<th>{{ language }}</th>
+				{% endfor %}
+				<th>{{ _t('actions') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for translationName, translation in translationList.items() %}
+			<tr>
+				<td>{{ translationName }}</td>
+				{% for language in localeList %}
+				<td>{{ translation.get(language, '') }}</td>
+				{% endfor %}
+				<td>
+					<a href="{{ url_for('translation_edit', name=translationName|urlencode) }}" title="{{ _t('edit') }}">
+						<i class="icon icon-edit"></i>
+					</a>
+					<a href="{{ url_for('translation_delete', name=translationName|urlencode) }}" title="{{ _t('delete') }}">
+						 <i class="icon icon-remove"></i>
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

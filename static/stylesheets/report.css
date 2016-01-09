@@ -1,0 +1,19 @@
+.date-block {
+	padding-left:1.5em;
+	
+	background-color: #2c2c2c; /* fallback color, place your own */
+	/* Gradients for modern browsers, replace as you see fit */
+	background-image: -moz-linear-gradient(top, #eeeeee, #ffffff);
+	background-image: -ms-linear-gradient(top, #eeeeee, #ffffff);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eeeeee), to(#ffffff));
+	background-image: -webkit-linear-gradient(top, #eeeeee, #ffffff);
+	background-image: -o-linear-gradient(top, #eeeeee, #ffffff);
+	background-image: linear-gradient(top, #eeeeee, #ffffff);
+	background-repeat: repeat-x;
+	/* IE8-9 gradient filter */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',    endColorstr='#ffffff', GradientType=0);
+}
+
+.selected-report {
+	background-color: #000 !important;
+}

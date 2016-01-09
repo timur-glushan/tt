@@ -1,0 +1,73 @@
+<div class="row">
+	<div class="span4">
+		<h4>
+			<a href="javascript:void(0);" class="report-filter-link" report-filter:start-date="{{ g._constant()['DATE']['TODAY'] }}" report-filter:end-date="{{ g._constant()['DATE']['TODAY'] }}">{{ _t('activity') }}/{{ _t('period:day short') }}</a>
+		</h4>
+		<div>
+			<b><span value-hours="{{ statistics['hrs_day'] }}">{{ statistics['hrs_day'] }}</span></b> {{ _t('time:hours short') }}
+			<br/>
+			<b>{{ statistics['tasks_day'] }}</b> {{ _t('tasks') }}
+			<br/>
+		</div>
+	</div>
+		
+	<div class="span4">
+		<h4>
+			<a href="javascript:void(0);" class="report-filter-link" report-filter:start-date="{{ g._constant()['DATE']['WEEK'] }}" report-filter:end-date="{{ g._constant()['DATE']['TODAY'] }}">{{ _t('activity') }}/{{ _t('period:week short') }}</a>
+		</h4>
+		<div>
+			<b><span value-hours="{{ statistics['hrs_week'] }}">{{ statistics['hrs_week'] }}</span></b> {{ _t('time:hours short') }}
+			<br/>
+			<b>{{ statistics['tasks_week'] }}</b> {{ _t('tasks') }}
+		</div>
+	</div>
+		
+	<div class="span4">
+		<h4><a href="javascript:void(0);" class="report-filter-link" report-filter:start-date="{{ g._constant()['DATE']['MONTH'] }}" report-filter:end-date="{{ g._constant()['DATE']['TODAY'] }}">{{ _t('activity') }}/{{ _t('period:month short') }}</a></h4>
+		<div>
+			<b><span value-hours="{{ statistics['hrs_month'] }}">{{ statistics['hrs_month'] }}</span></b> {{ _t('time:hours short') }}
+			<br/>
+			<b>{{ statistics['tasks_month'] }}</b> {{ _t('tasks') }}
+		</div>
+	</div>
+	
+	<div class="span4">
+		<h4>{{ _t('projects') }}/{{ _t('period:day short') }}</h4>
+		{% for project_id, duration in statistics['projects_day'].items() %}
+			<!--
+			<a href="{{ url_for('project_view', project_id=project_id|urlencode) }}">{{ project_id }}</a>: 
+			-->
+			<span>{{ project_id }}</a>: 
+			<b class="pull-right"><span value-hours="{{ duration }}">{{ duration }}</span></b>
+		<br/>
+		{% else %}
+		{{ _t('common:none') }}
+		{% endfor %}
+	</div>
+	<div class="span4">
+		<h4>{{ _t('projects') }}/{{ _t('period:week short') }}</h4>
+		{% for project_id, duration in statistics['projects_week'].items() %}
+			<!--
+			<a href="{{ url_for('project_view', project_id=project_id|urlencode) }}">{{ project_id }}</a>: 
+			-->
+			<span>{{ project_id }}</a>: 
+			<b class="pull-right"><span value-hours="{{ duration }}">{{ duration }}</span></b>
+		<br/>
+		{% else %}
+		{{ _t('common:none') }}
+		{% endfor %}
+	</div>
+	<div class="span4">
+		<h4>{{ _t('projects') }}/{{ _t('period:month short') }}</h4>
+		{% for project_id, duration in statistics['projects_month'].items() %}
+			<!--
+			<a href="{{ url_for('project_view', project_id=project_id|urlencode) }}">{{ project_id }}</a>: 
+			-->
+			<span>{{ project_id }}</a>: 
+			<b class="pull-right"><span value-hours="{{ duration }}">{{ duration }}</span></b>
+		<br/>
+		{% else %}
+		{{ _t('common:none') }}
+		{% endfor %}
+	</div>
+</div>

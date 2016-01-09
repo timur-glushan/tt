@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<ul class="nav nav-pills">
+		{% if access('project', action='update', project=project) %}
+		<li>
+			<a href="{{ url_for( 'project_view', project_id=project.id.__str__()|urlencode ) }}">
+				<span>{{ project.__str__() }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}">
+				<span><i class="icon-edit"></i> {{ _t('edit this project') }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}">
+				<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t('delete this project') }}</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+<div class="container">
+<div class="row">
+	
+	<section>
+		<strong>{{ _t('title') }}</strong>
+		<div>{% autoescape off %}{{ project.title or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		<strong>{{ _t('alias') }}</strong>
+		<div>{% autoescape off %}{{ project.alias or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		<strong>{{ _t('info') }}</strong>
+		<div>{% autoescape off %}{{ project.info or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		{% if access('project', action='update', project=project) %}
+		<strong>{{ _t('project components') }} | <a href="{{ url_for('project_components', project_id=project.id.__str__()|urlencode) }}">{{ _t('manage') }}</a></strong>
+		{% else %}
+		<strong>{{ _t('project components') }}</strong>
+		{% endif%}
+		
+		{% for component in project.components %}
+		{% if not component.alias == component.COMPONENT_DEFAULT %}
+		<div>{{ component.__str__() }}</div>
+		{% endif %}
+		{% endfor %}
+	</section>
+	<br/>
+	
+	<section>
+		{% if access('project', action='update', project=project) %}
+		<strong>{{ _t('project members') }} | <a href="{{ url_for('project_members', project_id=project.id.__str__()|urlencode) }}">{{ _t('manage') }}</a></strong>
+		{% else %}
+		<strong>{{ _t('project members') }}</strong>
+		{% endif%}
+		
+		{% for member in project.members %}
+		<div>
+			<a href="{{ url_for('profile_view', account_id=member.account.id) }}">{{ member.account.__str__() }}</a> 
+			<span>{{ _t('common:as') }}</span> 
+			<span>{{ member.role.__str__() }}</span> 
+		</div>
+		{% endfor %}
+	</section>
+	<br/>
+	
+	<section>
+		{% if access('project', action='update', project=project) %}
+		<strong>{{ _t('project labels') }} | <a href="{{ url_for('project_labels', project_id=project.id.__str__()|urlencode) }}">{{ _t('manage') }}</a></strong>
+		{% else %}
+		<strong>{{ _t('project labels') }}</strong>
+		{% endif%}
+		
+		{% for label in project.labels %}
+		<div>{{ label.__str__() }}</div>
+		{% endfor %}
+	</section>
+	<br/>
+	
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

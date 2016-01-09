@@ -1,0 +1,257 @@
+name,en,ru,uk
+account,Account,Учетная запись,Обліковий запис
+account_id,Account,Учетная запись,Обліковий запис
+actions,Actions,Действия,Дії
+active,Active,Активен,Активний
+activity,Activity,Активность,Активність
+add,Add,Добавить,Додати
+add member,Add Member,Добавить сотрудника,Додати співробітника
+add project,Add Project,Добавить проект,Додати проект
+add report,Add report,Добавить отчет,Додати звіт
+add translation,Add Translation,Добавить перевод,Додати переклад
+add variable,Add Variable,Добавить переменную,Додати змінну
+administration,Administration,Администрирование,Адміністрування
+alias,Alias,Псевдоним,Псевдонім
+application name,Time Tracking Tool,Time Tracking Tool,Time Tracking Tool
+application title,P-Product,P-Product,P-Product
+application title short,P-Product,P-Product,T3
+as manager,As Manager,В качестве менеджера,В якості менеджера
+back to home page,Back to Home Page,Вернуться на главную страницу,Повернутися на головну сторінку
+back to my account,Back to My Account,Назад в Мой профиль,Назад в Мій профіль
+back to top,Back To Top,Наверх,Наверх
+cancel,Cancel,Отмена,Скасувати
+chinese cookie,Chinese Fortune Cookie,Китайское печенье с предсказанием,Китайське печиво з побажанням
+chinese cookie disable,Don't Want the Fortune Cookies?,Не хотите получать печенья с предсказаниями?,Не хочете отримувати печиво з побажаннями?
+chinese cookie for today,Your Chinese Fortune Cookie For Today Says:,Ваше китайское печенье с предсказанием на сегодня гласит:,Ваше китайське печиво з побажанням на сьогодні говорить:
+choose employee,Choose Employee,Выберите сотрудника,Виберіть співробітника
+clear,Clear,Очистить,Вичистити
+close,Close,Закрыть,Закрити
+common:as,as,в качестве,в якості
+common:by,by,от,від
+common:none,None,Нет,Немає
+common:no,No,Нет,Ні
+common:on,on,по,по
+common:yes,Yes,Да,Так
+component,Component,Компонент,Компонент
+component create success,Component Created Successfully,Компонент успешно создан,Компонент успішно створено
+component delete success,Component Deleted Successfully,Компонент успешно удален,Компонент успішно видалено
+component update success,Component Updated Successfully,Компонент успешно обновлены,Компонент успішно оновлені
+configuration,Configuration,Конфигурация,Конфігурація
+confirm:delete,Delete,Удалить,Видалити
+confirm:remove,Remove,Удалить,Видалити
+confirm:remove permanently,Remove Permanently,Полное стирание,Повне стирання
+confirm new password,Confirm,Подтвердить,Підтвердити
+create,Create,Создать,Створити
+created,Created,Создано,Створено
+current password,Current Password,Текущий пароль,Поточний пароль
+date,Date,Дата,Дата
+datepicker multiple days,Multi-Date Calendar,Календарь с возможностью выбора N-дней,Календар з можливістю вибору N-днів
+day off,Day Off,Выходной день,Вихідний день
+define membership,Define Membership,Назначить участников,Назначити учасників
+delete,Delete,Удалить,Видалити
+deleted,Deleted,Удалено,Видалено
+delete report,Delete Report,Удалить отчет,Видалити звіт
+delete selected,Delete Selected,Удалить выбранное,Видалити відмічене
+delete this project,Delete This Project,Удалить этот проект,Видалити цей проект
+description,Description,Описание,Опис
+does not match,Doesn't Match,Не совпадает,Не співпадає
+duplicate entry,Duplicate Entry,Такая запись уже существует,Такий запис вже існує
+duration,Duration,Длительность,Тривалість
+edit,Edit,Редактировать,Редагувати
+edit profile,Edit Profile,Редактировать профиль,Правити профіль
+edit project,Edit Project,Редактировать проекта,Правити проекту
+edit this project,Edit This Project,Редактировать этот проект,Правити цей проект
+efforts,Efforts,Усилия,Зусилля
+email,Email,Эл. почта,Електронна пошта 
+employee,Employee,Сотрудник,Співробітник
+employees,Employees,Сотрудники,Співробітники
+exclude,Exclude,Исключать,Виключати
+feedback,Feedback,Обратная связь,Зворотній зв'язок
+filter,Filter,Фильтр,Фільтр
+first name,First Name,Имя,Ім'я
+float,Float,Дробные,Дріб
+forever,Forever,ЗА все время,За весь час
+group,Group,Группа,Група
+group_id,Group,Группа,Група
+help,Information,Информация,Інформація
+help-application,Welcome! To start using the application please proceed to the Reports page.,"Добро пожаловать! Чтобы начать работу с приложением, пожалуйста, перейдите к странице Отчеты .””","В Щоб почати роботу з додатком, будь ласка, перейдіть до сторінцки “Звіти”."
+HH,HH,ЧЧ,ГГ
+hide,Hide,Скрыть,Приховати
+hide filters,Hide filters,Скрыть фильтры,Приховати фільтри
+holiday,Holiday,Выходной,Свято
+holiday:new year,New Year,Новый год,Новий рік
+holiday:christmass,Christmass,Рождество,Різдво
+holiday:international womens day,International Women's Day,Международный Женский День,Міжнародний День Жінок
+holiday:international womens day (saturday),International Women's day (Saturday),Международный Женский День (суббота),Міжнародний День Жінок (субота)
+holiday:easter,Easter,Пасха,Великдень
+holiday:easter (sunday),Easter (Sunday),Пасха (воскресенье),Великдень (неділя)
+holiday:international workers day,International Workers Day,День Международной Солидарности Трудящих,День Міжнародної Солідарності Трудящих
+holiday:international workers day,International Workers Day,День Международной Солидарности Трудящих,День Міжнародної Солідарності Трудящих
+holiday:victory day,Victory Day,День Победы,День Перемоги
+holiday:trinity,Trinity,Троица,Трійця
+holiday:trinity (sunday),Trinity (Sunday),Троица (воскресенье),Трійця (неділя)
+holiday:ukrainian constitution day,Ukrainian Constitution Day,День Конституции Украинской,День Конституції України
+holiday:ukrainian constitution day (saturday),Ukrainian Constitution Day (Saturday),День Конституции Украинской (суббота),День Конституції України (субота)
+holiday:ukrainian independence day,Ukrainian Independence Day,День Независимости Украины,День Незалежності України
+holiday:ukrainian independence day (sunday),Ukrainian Independence Day (Sunday),День Независимости Украины (воскресенье),День Незалежності України (неділя)
+hours,Hours,Часы,Години
+http:error 403,You don't wanna go there,Тебе туда не нужно,Тобі туди не треба
+http:error 404,Are you sure it's the right address?,"Какой, говорите, адрес? 3я улица Строителей, дом 25, квартира 12?","Яка, Ви кажете, адреса? 3я вулиця Строітелей, дом 25, квартира 12?"
+http:error 40x,Be careful with your wishes,Будь осторожнее со своими желаниями,Будь обережнійшим зі своїми бажаннями
+http:error 500,"Don't be afraid, I'm gonna save you!","Не бойся, я спасу тебя!","Не бійся, я врятую тебе!"
+http:error 50x,The whole thing is broken... Happy now?,"Шеф, усё пропало!",А хай тобі грець!
+http:error title 403,Oops...,Ой...,Ой...
+http:error title 404,Oops...,Ой...,Ой...
+http:error title 40x,Oops...,Ой...,Ой...
+http:error title 500,Oops...,Ой...,Ой...
+http:error title 50x,Oops...,Ой...,Ой...
+ID,ID,Идентификатор,Ідентифікатор
+inactive,Inactive,Неактивен,Неактивний
+include,Include,Включать,Включати
+info,Info,Информация,Інформація
+invalid login or password,Invalid Login or Password,Неверный логин или пароль,Невірний логін або пароль
+key,Key,Ключ,Ключ
+label create success,Label Created Successfully,Метка успешно создана,Мітку успішно строрено
+label delete success,Label Deleted Successfully,Метка успешно удалена,Мітку успішно видалено
+label update success,Label Updated Successfully,Метка успешно обновлена,Мітку успішно оновлено
+language,Language,Язык,Мова
+language:en,English,Английский,Англійська
+language:ru,Russian,Русский,Російська
+language:uk,Ukrainian,Украинский,Українська
+last name,Last Name,Фамилия,Прізвище
+lastmonth,Last Month,Прошлый месяц,Минулого місяця
+lastyear,Last Year,Прошлый год,Минулого року
+layout,Layout,Макет,Макет
+layout:by date,By Date,По датам,По датам
+layout:by project,By Project,По проектам,По проектам
+layout:detailed,Detailed Layout,Подробно,Детально
+layout:group identical,Merge Identical,Объеденить Идентичные,Об'єднати ідентичні
+layout:group days,Days Grouped,Дни сгруппированы,Дні згруповані
+layout:group projects,Projects Grouped,Проекты сгруппированы,Проекти згруповані
+localization,Localization,Локализация,Локалізація
+manage,Manage,Управление ,Управління
+manage translations,Manage Translations,Управление переводами,Управління перекладами
+manage variables,Manage Variables,Управление переменными,Управління змінними
+masquerade,Masquerade,Маскирование,Маскування
+masquerade stop success,Masquerading Stopped,Маскирование завершено,Маскування завершено
+masquerade success,Masquerade Successful,Маскирование активиновано,Маскування активовано
+me,Me,Я,Я
+members,Members,Участники,Учасники
+membership,Membership,Участие,Участь
+membership create success,Membership Created Successfully,Участник успешно добавлен,Учасника успішно додано
+membership delete success,Membership Deleted Successfully,Участник исключен,Учасника виключено
+membership update success,Membership Updated Successfully,Запись участника успешно обновлена,Запис учасника успішно оновлено
+message,Message,Сообщение,Повідомлення
+MM,MM,МИН,ХВ
+month,This Month Until Today,Этот месяц по сегодняшний день,Цього місяця до сьогодні
+multiple,Multiple,Несколько,Декілька
+must be unique,Must Be Unique,Должно быть уникальным,Повинно бути унікальним
+my efforts,My Efforts,Мои статистики,Мої статистики
+my projects,My Projects,Мои проекты,Мої проекти
+my reports,My Reports,Мои отчеты,Мої звіти
+name,Name,Имя,Назва
+new password,New Password,Новый пароль,Новий пароль
+new profile,New Profile,Новый пользователь,Новий користувач
+not a json,Not a valid JSON,Невалидный JSON,Не є валідним JSON
+not member,Not a Member,Не является участником,Не є учасником
+OK,OK,Ок,ОК
+operator,Operator,Оператор,Оператор
+partitions,Partitions,Разделы,Розділи
+password,Password,Пароль,Пароль 
+period forever,Forever,За все время,За весь час
+period lastmonth,Last Month,Прошлый месяц,Минулого місяця
+period month,Month,Этот месяц по сегодняшний день,Цього місяця до сьогодні
+period today,Today,Сегодня,Сьогодні
+period week,Week,За эту неделю по сегодня,Цього тижня по сьогодні
+period year,Year,Этот год по сегодня,Цього року по сьогодні
+period:day short,D,день,день
+period:week short,W,нед.,тижд.
+period:month short,M,мес.,міс.
+preference create success,Preference Created Successfully,Настройка добавлена,Додано налаштування
+preference delete success,Preference Deleted Successfully,Настройка удалена,Налаштування видалено
+preference update error,Preference Could Not Be Updated,Настройка не обновлена: задано неверное значение,Налаштування не оновлено: задано невірне значення
+preference update success,Preference Updated Successfully,Настройка обновлена,Налаштуванния оновлено
+profile,Profile,Профиль пользователя,Профіль користувача
+profile delete,Delete Profile,Удаление проекта,Видалення проекту
+profile delete success,Profile Deleted,Профиль пользователя удален,Профіль користувача видалено
+profile delete success message,Project Deleted Successfully,Профиль пользователя успешно удален,Профіль користувача успішно видалено
+profile details,Profile Details,Детали,Деталі
+profile name,Profile Name,Имя,Iм'я
+profile password set,Change Password,Изменить пароль,Змінити пароль
+profile password set success,Password Changed Successfully,Пароль изменен успешно,Пароль змінений успішно
+profile preferences,Profile Preferences,Настройки,Налаштування
+profile remove permanently success,Profile Removed,Профиль пользователя стерт,Профіль користувача стерто
+profile remove permanently success message,Profile Removed Permamently,Профиль пользователя полностью стерт,Профіль користувача повністю стерто
+profile submit success,Profile Submitted Successfully,Профиль пользователя успешно сохранен,Профіль користувача успішно збережено
+project,Project,Проект,Проект
+project_id,Project,Проект,Проект
+project components,Project Components,Компоненты проекта,Компоненти проекту
+project delete,Delete A Project,Удалить проект,Видалити проект
+project delete success,Project Deleted,Проект удален,Проект видалено
+project delete success message,Project Deleted Successfully,Проект успешно удален,Проект успішно видалено
+project labels,Project Labels,Метки проекта,Мітки проекту
+project members,Project Members,Участники проекта,Учасники проекту
+project remove permanently success,Project Removed,Проект стерт,Проект стерто
+project remove permanently success message,Project Removed Permanently,Проект полностью стерт,Проект повністю стерто
+project submit success,Project Submitted,Проект сохранен,Проект збережено
+projects,Projects,Проекты,Проекти
+remove,Remove,Стереть,Стерти
+report delete,Delete A Report,Удалить отчет,Видалити звіт
+report delete success,Report Deleted,Отчет удален,Звіт видалено
+report delete success message,Report Deleted Successfully,Отчет успешно удален,Звіт успішно видалено
+report remove permanently success,Report Removed,Отчет стерт,Звіт стерто
+report remove permanently success message,Report Removed Permanently,Отчет полностью стерт,Звіт повністю стерто
+report submit,Submit A Report,Новый отчет,Новий звіт
+report submit success,Report Submitted,Отчет сохранен,Звіт збережено
+report submit success message,Report Submitted Successfully,Сообщить успешно послано,Повідомити успішно послано
+report time format,Reports Time Format,Формат времени отчета,Формат часу звіту
+reports,Reports,Отчеты ,Звіти
+required,Field is Required,Обязательное поле,Обов'язкове поле
+role,Role,Роль ,Роль
+role_id,Role,Роль ,Роль
+save,Save,Сохранить,Зберегти
+scope,Scope,Раздел,Розділ
+search projects,Search Projects,Поиск по проектам,Пошук по проектам
+see details,See Details,Детали,Деталі
+select project,Project,Проект,Проект
+set language,Choose Language,Язык отображения,Мова
+set language prompt,Choose a Display Language For the System,Выберите язык отображения в системе,Виберіть мову відображення в системі
+set password,Set Password,Установка пароля,Встановлення пароля
+show,Show,Показать,Показати
+show chinese cookie,Chinese Fortune Cookies,Китайское печенье с предсказаниями,Китайське печиво з побажаннями
+show deleted reports,Show Deleted Reports,Показывать удаленные отчеты,Показувати видалені звіти
+show filters,Show filters,Показать фильтры,Показати фільтри
+sign in,Sign In,Вход,Вхід
+sign out,Sign Out,Выход,Вихід
+signin success,You were signed in,Вход выполнен,Вас було авторизовано
+signout success,You were signed out,Выход выполнен,Ви вийшли з системи
+specify role,Specify Role,Укажите роль,Вкажіть роль
+status,Status,Статус,Статус 
+subject,Subject,Описание,Опис
+submit,Submit,Отправить,Відправити
+submit report,Submit a Report,Отправить отчет,Відправити звіт
+summary,Summary,Сводка,Сводка
+sure?,Are you sure?,Вы уверены? ,Ви впевнені?
+tasks,Tasks,Задачи,Задачі
+time:hours short,hrs,ч,ч
+time format,Time Format,Формат времени,Формат часу
+title,Title,Название,Заголовок
+today,Today,Сегодня,Сьогодні
+toggle selection,Toggle Selection,Выделить,Відмітити
+total,Total,Сумма,Усього
+total for period,Total for a Period,Всего за период,Всього за період
+translation,Translation,Перевод ,Переклад
+translation submit success,Translation Submitted Successfully,Перевод успешно сохранен,Переклад успішно збережено
+translations,Translations,Переводы,Переклади
+using multiple dates,Multi-Date Calendar Enabled,Включен календарь с выбором N-дней,Увімкнено календар з вибором N-днів
+using single date,Single-Date Calendar Enabled,Включен календарь с выбором 1 дня,Увімкнено календар з вибором 1 дня
+value,Value,Значение ,Значення
+variable,Variable,Настройка,Налаштування
+variable submit success,Variable Submitted Successfully,Настройка успешно сохранена,Налаштування успішно збережено
+variables,Variables,Настройки,Налаштування
+view,View,Просмотреть,Перегляд
+view profile,View Profile,Просмотр профиля пользователя,Перегляд профілю користувача
+week,This Week Until Today,За эту неделю по сегодня,Цього тижня по сьогодні
+weekend,Weekend,Выходной день,Вихідний день
+XMPP login,Jabber (Pidgin) login or email,Логин Jabber (Pidgin) или эл.почта,Логін Jabber (Pidgin) або ел.пошта
+year,This Year Unil Today,Этот год по сегодня,Цього року по сьогодні

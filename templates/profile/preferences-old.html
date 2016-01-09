@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+	{% if account and account.id  %}
+		{% if access('profile', action='update', account=account) %}
+		<li class="{% if _is_active_path( url_for( 'profile_edit', account_id=account.id ) ) %}active{% endif %}">
+			<a href="{{ url_for( 'profile_edit', account_id=account.id ) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-edit"></i> {{ _t( 'edit profile' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-edit"></i> {{ _t( 'edit profile' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		
+		<li class="{% if _is_active_path( url_for( 'profile_preferences', account_id=account.id ) ) %}active{% endif %}">
+			<a href="{{ url_for( 'profile_preferences', account_id=account.id ) }}">
+				<span><i class="icon-edit"></i> {{ _t( 'profile preferences' ) }}</span>
+			</a>
+		</li>
+		
+		{% if access('activity', account=employee) %}
+		<li class="">
+			<a href="{{ url_for('report_index', account_id=account.id.__str__()|urlencode) }}">
+				<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-time"></i> {{ _t('reports') }}</span>
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if access('masquerade', account=account) %}
+		<li class="{% if _is_active_path(url_for('session_masquerade', account_id=account.id|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('session_masquerade', account_id=account.id|urlencode) }}">
+				<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-user"></i> {{ _t('masquerade') }}</span>
+			</a>
+		</li>
+		{% endif %}
+		
+		<li class="{% if _is_active_path( url_for( 'profile_password', account_id=account.id ) ) %}active{% endif %}">
+			<a href="{{ url_for( 'profile_password', account_id=account.id ) }}">
+				{% if account.id == g.account.id %}
+					<span><i class="icon-edit"></i> {{ _t( 'set password' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-edit"></i> {{ _t( 'set password' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if access('profile', action='update', account=account) %}
+		<li class="{% if _is_active_path( url_for( 'profile_delete', account_id=account.id ) ) %}active{% endif %}">
+			<a href="{{ url_for( 'profile_delete', account_id=account.id ) }}">
+				<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-trash"></i> {{ _t( 'delete' ) }}</span>
+			</a>
+		</li>
+		{% endif %}
+	{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<div class="span8">
+		<form method="POST" class="well" >
+			{% if not submittedPreference.id %}
+			{% for error in submittedPreference.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="POST" />
+		
+			<div class="input-group">
+				<input type="text" name="preference_name" value="{% if not submittedPreference.id %}{{ submittedPreference.name or '' }}{% endif %}" class="form-control" placeholder="{{ _t('name') }}" />
+				<input type="text" name="preference_raw_value" value="{% if not submittedPreference.id %}{{ submittedPreference.raw_value or '' }}{% endif %}" class="form-control" placeholder="{{ _t('value') }}" />
+				<input style="vertical-align:top;" type="submit" value="{{ _t('create') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+	</div>
+	<div class="span3"></div>
+	
+	{% for preference in account.preferences %}
+	<div class="span12 well">
+		<form method="POST" class="pull-left" >
+			{% if submittedPreference.id == preference.id %}
+			{% for error in submittedPreference.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="PUT" />
+			<input type="hidden" name="preference_id" value="{{ preference.id }}" />
+		
+			<div class="pull-left input-group">
+				<input type="text" name="preference_name" value="{% if submittedPreference.id == preference.id %}{{ submittedPreference.name or '' }}{% else %}{{ preference.name or '' }}{% endif %}" class="form-control" placeholder="{{ _t('name') }}" />
+				<input type="text" name="preference_raw_value" value="{% if submittedPreference.id == preference.id %}{{ submittedPreference.raw_value or '' }}{% else %}{{ preference.raw_value or '' }}{% endif %}" class="form-control" placeholder="{{ _t('value') }}" />
+				<input style="vertical-align:top;" type="submit" value="{{ _t('update') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+		
+		<form method="POST" class="pull-left" >
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="DELETE" />
+			<input type="hidden" name="preference_id" value="{{ preference.id }}" />
+			
+			<div class="pull-left input-group">
+				<input style="vertical-align:top;" type="submit" value="{{ _t('delete') }}" class="form-control btn btn-danger" />
+			</div>
+		</form>
+	</div>
+	{% endfor %}
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

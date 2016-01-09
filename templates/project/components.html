@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+		{% if access('project', action='update', project=project) %}
+		<li>
+			<a href="{{ url_for( 'project_view', project_id=project.id.__str__()|urlencode ) }}">
+				<span>{{ project.__str__() }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}">
+				<span><i class="icon-edit"></i> {{ _t('edit this project') }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}">
+				<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t('delete this project') }}</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<div class="span12 well">
+		<form method="POST" class="pull-left" >
+			{% if not submittedComponent.id %}
+			{% for error in submittedComponent.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="POST" />
+			
+			<div class="pull-left input-group">
+				<label for="component_alias">{{ _t('alias') }}</label>
+				<input type="text" name="component_alias" value="{% if not submittedComponent.id %}{{ submittedComponent.alias or '' }}{% endif %}" />
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="component_title">{{ _t('title') }}</label>
+				<input type="text" name="component_title" value="{% if not submittedComponent.id %}{{ submittedComponent.title or '' }}{% endif %}" />
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="component_info">{{ _t('info') }}</label>
+				<input type="text" name="component_info" value="{% if not submittedComponent.id %}{{ submittedComponent.info or '' }}{% endif %}" />
+			</div>
+				
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('create') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+	</div>
+	
+	{% for component in project.components %}
+	{% if not component.alias == component.COMPONENT_DEFAULT %}
+	<div class="span12 well">
+		<form method="POST" class="" >
+			{% if submittedComponent.id == component.id %}
+			{% for error in submittedComponent.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="PUT" />
+			<input type="hidden" name="component_id" value="{{ component.id }}" />
+			
+			<div class="pull-left input-group">
+				<label for="component_alias">{{ _t('alias') }}</label>
+				<input type="text" name="component_alias" value="{% if submittedComponent.id == component.id %}{{ submittedComponent.alias or '' }}{% else %}{{ component.alias or '' }}{% endif %}" />
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="component_title">{{ _t('title') }}</label>
+				<input type="text" name="component_title" value="{% if submittedComponent.id == component.id %}{{ submittedComponent.title or '' }}{% else %}{{ component.title or '' }}{% endif %}" />
+			</div>
+			
+			<div class="pull-left input-group">
+				<label for="component_info">{{ _t('info') }}</label>
+				<input type="text" name="component_info" value="{% if submittedComponent.id == component.id %}{{ submittedComponent.info or '' }}{% else %}{{ component.info or '' }}{% endif %}" />
+			</div>
+				
+			<div class="clearfix"></div>
+				
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('update') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+		
+		<form method="POST" class="" >
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="DELETE" />
+			<input type="hidden" name="component_id" value="{{ component.id }}" />
+			
+			<div class="pull-left input-group">
+				<input style="vertical-align:top;" type="submit" value="{{ _t('delete') }}" class="form-control btn btn-danger" />
+			</div>
+		</form>
+	</div>
+	{% endif %}
+	{% endfor %}
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

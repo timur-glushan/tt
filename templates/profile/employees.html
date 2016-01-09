@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	{% if access('profile', action='create') %}
+	<a class="btn pull-right" href="{{ url_for( 'profile_edit' ) }}" title="{{ _t('new profile') }}"><i class="icon-plus"></i><span class="menu-title">{{ _t('new profile') }}</span></a>
+	{% endif %}
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th width="22%">{{ _t('group') }}</th>
+				<th width="22%">{{ _t('name') }}</th>
+				<th width="22%">{{ _t('email') }}</th>
+				<th width="34%">{{ _t('actions') }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for employee in employees %}
+			<tr>
+				<td>{{ employee.group and employee.group.__str__() or '' }}</td>
+				
+				<td>
+				{% if access('profile', action='read', account=employee) %}
+					<a href="{{ url_for('profile_view', account_id=employee.id.__str__()|urlencode) }}">{{ employee.__str__() or '' }}</a>
+				{% else %}
+					{{ employee.__str__() or '' }}
+				{% endif %}
+				</td>
+				
+				<td>{{ employee.email or '' }}</td>
+				
+				<td>
+					{% if access('profile', action='update', account=employee) %}
+					<a href="{{ url_for( 'profile_edit', account_id=employee.id.__str__()|urlencode ) }}" title="{{ _t('edit') }}"><i class="icon-edit"></i> {{ _t( 'edit' ) }}</a>
+					{% endif %}
+					{% if access('profile', action='update', account=employee) %}
+					<a href="{{ url_for( 'profile_delete', account_id=employee.id.__str__()|urlencode ) }}" title="{{ _t('delete') }}"><i class="icon-remove"></i> {{ _t( 'delete' ) }}</a>
+					{% endif %}
+					{% if access('activity', account=employee) %}
+					<a href="{{ url_for( 'report_index', account_id=employee.id.__str__()|urlencode ) }}" title="{{ _t('reports') }}"><i class="icon-time"></i> {{ _t( 'reports' ) }}</a>
+					{% endif %}
+					{% if access('masquerade', account=employee) %}
+					<a href="{{ url_for( 'session_masquerade', account_id=employee.id.__str__()|urlencode ) }}" title="{{ _t('masquerade') }}"><i class="icon-user"></i> {{ _t( 'masquerade' ) }}</a>
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}

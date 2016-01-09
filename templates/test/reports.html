@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+	<form method="POST" class="well">
+		<div class="control-group">
+			<label class="control-label" for="filter_since">Date Ranges:</label>
+			<div class="controls">
+				Since: <input type="text" name="filter_since" value="{{ request.values.get('filter_since', '2014-04-01') }}" />
+				By: <input type="text" name="filter_by" value="{{ request.values.get('filter_by', '2014-07-01') }}" />
+			</div>
+		</div>
+			<label for="filter_by"></label>
+		<div class="control-group">
+			<input type="submit" name="filter_submit" value="temp-view" class="btn btn-primary" />
+			<input type="submit" name="filter_submit" value="view-and-iterate" class="btn btn-primary" />
+			<input type="submit" name="filter_submit" value="view-with-arguments" class="btn btn-primary" />
+		</div>
+	</form>
+</div>
+
+{% if request.values.get('filter_submit') %}
+<div class="row">
+	<pre>Callback: {{ request.values.get('filter_submit') }}</pre>
+</div>
+{% endif %}
+
+{% if duration %}
+<div class="row">
+	<pre>Duration: {{ duration }}s</pre>
+</div>
+{% endif %}
+
+{% if extra %}
+<div class="row">
+	<pre>{{ extra }}</pre>
+</div>
+{% endif %}
+
+{% if data %}
+<pre>Count: {{ data.__len__() }}</pre>
+<div class="row">
+<table width="100%">
+	<tr>
+		<th>&nbsp;</th>
+		<th>ID</th>
+		<th>due</th>
+		<th>employee</th>
+		<th>project</th>
+		<th>partition</th>
+	</tr>
+	
+	{% for row in data %}
+	<tr>
+		<td>{{ loop.index }}</td>
+		<td>{{ row._id }}</td>
+		<td>{{ row.due_date }}</td>
+		<td>{{ row.employee }}</td>
+		<td>{{ row.project }}</td>
+		<td>{{ row.partition }}</td>
+	</tr>
+	{% endfor %}
+</table>
+</div>
+{% endif %}
+
+</div>
+{% endblock %}

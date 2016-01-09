@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+	{% if account and account.id  %}
+		{% if access('profile', action='update', account=account) %}
+		<li class="{% if _is_active_path(url_for('profile_edit', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_edit', account_id=account.id.__str__()|urlencode) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-edit"></i> {{ _t( 'edit profile' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-edit"></i> {{ _t( 'edit profile' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		
+		<li class="{% if _is_active_path(url_for('profile_preferences', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_preferences', account_id=account.id.__str__()|urlencode) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-gear"></i> {{ _t( 'profile preferences' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-gear"></i> {{ _t( 'profile preferences' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		
+		{% if access('activity', account=employee) %}
+		<li class="">
+			<a href="{{ url_for('report_index', account_id=account.id.__str__()|urlencode) }}">
+				{% if access('authenticated', account=account) %}
+					<span><i class="icon-time"></i> {{ _t( 'reports' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-time"></i> {{ _t( 'reports' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if access('masquerade', account=account) %}
+		<li class="{% if _is_active_path(url_for('session_masquerade', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('session_masquerade', account_id=account.id.__str__()|urlencode) }}">
+				<span class="alert-info"><i class="icon-exclamation-sign"></i> <i class="icon-user"></i> {{ _t('masquerade') }}</span>
+			</a>
+		</li>
+		{% endif %}
+		
+		<li class="{% if _is_active_path(url_for('profile_password', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_password', account_id=account.id.__str__()|urlencode) }}">
+				{% if account.id == g.account.id %}
+					<span><i class="icon-edit"></i> {{ _t( 'set password' ) }}</span>
+				{% else %}
+					<span class="alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-edit"></i> {{ _t( 'set password' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if access('profile', action='update', account=account) %}
+		<li class="{% if _is_active_path(url_for('profile_delete', account_id=account.id.__str__()|urlencode)) %}active{% endif %}">
+			<a href="{{ url_for('profile_delete', account_id=account.id.__str__()|urlencode) }}">
+				{% if account.id == g.account.id %}
+					<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t( 'delete' ) }}</span>
+				{% else %}
+					<span class="alert alert-danger"><i class="icon-exclamation-sign"></i> <i class="icon-trash"></i> {{ _t( 'delete' ) }}</span>
+				{% endif %}
+			</a>
+		</li>
+		{% endif %}
+	{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<section>
+		<strong>{{ _t('profile alias') }}</strong>
+		<div>{% autoescape off %}{{ account.alias or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		<strong>{{ _t('profile name') }}</strong>
+		<div>{% autoescape off %}{{ account.first_name or '' }} {{ account.last_name or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		<strong>{{ _t('profile email') }}</strong>
+		<div>{% autoescape off %}{{ account.email or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		<strong>{{ _t('profile info') }}</strong>
+		<div>{% autoescape off %}{{ account.info or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+	<section>
+		<strong>{{ _t('profile group') }}</strong>
+		<div>{% autoescape off %}{{ account.group and account.group.__str__() or '' }}{% endautoescape %}</div>
+	</section>
+	<br/>
+	
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

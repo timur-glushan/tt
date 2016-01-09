@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+
+<div class="row">
+	<div class="span4">
+		<h2 style="text-align:center;">{{ _t('http:error title '+error.code.__str__()) }} {{ error.code.__str__() }}</h2>
+		<h4 class="muted" style="text-align:center;">{{ _t('http:error '+error.code.__str__()) }}</h4>
+	</div>
+	
+	<div class="span4">
+		{% autoescape false %}
+		<img style="margin:0 auto; display:block; height:20em;" src="{{ url_for('static', filename='images/minions/minions-icons-superman.jpg') }}">
+		{% endautoescape %}
+	</div>
+	
+	<div class="span4">
+		<h4><a href="{{ url_for( 'application_index' ) }}">{{ _t('back to home page') }}</a></h4>
+	</div>
+</div>
+
+</div>
+{% endblock %}
+

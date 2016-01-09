@@ -1,0 +1,6 @@
+flask
+mysql-python
+sqlalchemy
+flask-sqlalchemy
+cherrypy
+unidecode

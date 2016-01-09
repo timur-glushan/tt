@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+		{% if access('project', action='update', project=project) %}
+		<li>
+			<a href="{{ url_for( 'project_view', project_id=project.id.__str__()|urlencode ) }}">
+				<span>{{ project.__str__() }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}">
+				<span><i class="icon-edit"></i> {{ _t('edit this project') }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}">
+				<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t('delete this project') }}</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<div class="span12 well">
+		<form method="POST" class="pull-left" >
+			{% if not submittedLabel.id %}
+			{% for error in submittedLabel.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="POST" />
+			
+			<div class="pull-left input-group">
+				<label for="label_title">{{ _t('title') }}</label>
+				<input type="text" name="label_title" value="{% if not submittedLabel.id %}{{ submittedLabel.title or '' }}{% endif %}" />
+			</div>
+			
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('create') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+	</div>
+	
+	{% for label in project.labels %}
+	<div class="span12 well">
+		<form method="POST" class="" >
+			{% if submittedLabel.id == label.id %}
+			{% for error in submittedLabel.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="PUT" />
+			<input type="hidden" name="label_id" value="{{ label.id }}" />
+			
+			<div class="pull-left input-group">
+				<label for="label_title">{{ _t('title') }}</label>
+				<input type="text" name="label_title" value="{% if submittedLabel.id == label.id %}{{ submittedLabel.title or '' }}{% else %}{{ label.title or '' }}{% endif %}" />
+			</div>
+			
+			<div class="clearfix"></div>
+				
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('update') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+		
+		<form method="POST" class="" >
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="DELETE" />
+			<input type="hidden" name="label_id" value="{{ label.id }}" />
+			
+			<div class="pull-left input-group">
+				<input style="vertical-align:top;" type="submit" value="{{ _t('delete') }}" class="form-control btn btn-danger" />
+			</div>
+		</form>
+	</div>
+	{% endfor %}
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

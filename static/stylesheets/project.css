@@ -1,0 +1,10 @@
+#member-list {
+	margin:1em 0;
+	padding:0;
+	list-style:none;
+}
+
+form[name=membership-item-form] [name=employee] {
+	border:none;
+	font-weight:bold;
+}
