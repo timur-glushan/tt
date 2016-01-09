@@ -4,20 +4,20 @@ from application import app
 
 @app.install('install_couchdb_common_doc')
 def install_couchdb_common_doc():
-	"""Create the couchdb common documents - users, projects, etc."""
-	from application import app
-	from libraries.couchDB import CouchDB
-	import json
-	
-	couchdb = CouchDB(
-		host=app.config['COUCHDB']['host'], 
-		database=app.config['COUCHDB']['database'], 
-		name=app.config['COUCHDB']['name'], 
-		password=app.config['COUCHDB']['password']
-	)
-	
-	commonDoc = {
-		"timur.glushan": 
+  """Create the couchdb common documents - users, projects, etc."""
+  from application import app
+  from libraries.couchDB import CouchDB
+  import json
+  
+  couchdb = CouchDB(
+    host=app.config['COUCHDB']['host'], 
+    database=app.config['COUCHDB']['database'], 
+    name=app.config['COUCHDB']['name'], 
+    password=app.config['COUCHDB']['password']
+  )
+  
+  commonDoc = {
+    "timur.glushan": 
 """{
    "_id": "timur.glushan",
    "first_name": "Timur",
@@ -33,10 +33,10 @@ def install_couchdb_common_doc():
    "type": "employee",
    "email": "timur.glushan@p-product.com"
 }""",
-		
-		
-		
-		"MGM": 
+    
+    
+    
+    "MGM": 
 """{
    "_id": "MGM",
    "info": null,
@@ -58,31 +58,31 @@ def install_couchdb_common_doc():
    },
    "type": "project"
 }""",
-		
-		"OUT": 
+    
+    "OUT": 
 """{
    "_id": "OUT",
    "title": "Hours sink for time that an employee was available in XMPP but was neither doing work nor in stand-by",
    "type": "project"
 }""",
-		
-		
-		
-		"INT/EDU": 
+    
+    
+    
+    "INT/EDU": 
 """{
    "_id": "INT/EDU",
    "title": "Self Education. Report summary is obligatory!",
    "type": "project"
 }""",
-		
-		"INT/IDLE": 
+    
+    "INT/IDLE": 
 """{
    "_id": "INT/IDLE",
    "title": "Hours sink for time that an employee is online and available but doesn't have a specific task",
    "type": "project"
 }""",
-		
-		"INT/OFFICE": 
+    
+    "INT/OFFICE": 
 """{
    "_id": "INT/OFFICE",
    "description": "",
@@ -95,8 +95,8 @@ def install_couchdb_common_doc():
    "partitions": {
    }
 }"""
-	}
-	
-	for docID, doc in commonDoc.items():
-		if not couchdb.getDocument(docID):
-			couchdb.putDocument(docID, json.loads(doc))
+  }
+  
+  for docID, doc in commonDoc.items():
+    if not couchdb.getDocument(docID):
+      couchdb.putDocument(docID, json.loads(doc))

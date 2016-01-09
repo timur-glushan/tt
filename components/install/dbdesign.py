@@ -4,20 +4,20 @@ from application import app
 
 @app.install('install_couchdb_design_doc')
 def install_couchdb_design_doc():
-	"""Create the couchdb design documents"""
-	from application import app
-	from libraries.couchDB import CouchDB
-	import json
-	
-	couchdb = CouchDB(
-		host=app.config['COUCHDB']['host'], 
-		database=app.config['COUCHDB']['database'], 
-		name=app.config['COUCHDB']['name'], 
-		password=app.config['COUCHDB']['password']
-	)
-	
-	designDoc = {
-		"_design/employees": 
+  """Create the couchdb design documents"""
+  from application import app
+  from libraries.couchDB import CouchDB
+  import json
+  
+  couchdb = CouchDB(
+    host=app.config['COUCHDB']['host'], 
+    database=app.config['COUCHDB']['database'], 
+    name=app.config['COUCHDB']['name'], 
+    password=app.config['COUCHDB']['password']
+  )
+  
+  designDoc = {
+    "_design/employees": 
 """{
    "_id": "_design/employees",
    "views": {
@@ -34,8 +34,8 @@ def install_couchdb_design_doc():
    },
    "language": "javascript"
 }""",
-		
-		"_design/projects": 
+    
+    "_design/projects": 
 """{
    "_id": "_design/projects",
    "views": {
@@ -53,8 +53,8 @@ def install_couchdb_design_doc():
        }
    }
 }""",
-		
-		"_design/reports": 
+    
+    "_design/reports": 
 """{
    "_id": "_design/reports",
    "views": {
@@ -138,8 +138,8 @@ def install_couchdb_design_doc():
        "utils": " { exports.toYearWeek = function (d) {\n    // Copy date so don't modify original\n    d = new Date(d);\n    d.setHours(0,0,0);    \n    // Set to nearest Thursday: current date + 4 - current day number\n    // Make Sunday's day number 7\n    d.setDate(d.getDate() + 4 - (d.getDay()||7));    \n    // Get first day of year\n    var yearStart = new Date(d.getFullYear(),0,1);   \n    // Calculate full weeks to nearest Thursday\n    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7)\n    // Return array of year and week number\n    return '' + d.getFullYear() + '-W' + weekNo;\n  }\n }"
    }
 }""",
-		
-		"_design/htmlproduce": 
+    
+    "_design/htmlproduce": 
 """{
    "_id": "_design/htmlproduce",
    "views": {
@@ -152,8 +152,8 @@ def install_couchdb_design_doc():
        "report": "function (head, req) {\r\r\n\r\r\n\ttoHM = function (hours) {\r\r\n\t\tvar minutes = hours * 60;\r\r\n\t\thours = Math.floor(hours)\r\r\n\t\tminutes = Math.round(minutes) % 60;\r\r\n\t\treturn hours + \":\" + (\"0\" + minutes).slice(-2);\r\r\n\t};\r\r\n\r\r\n\tstart({\r\r\n\t\theaders: {\r\r\n\t\t\t'Content-Type': 'text/html;charset=utf-8'\r\r\n\t\t}\r\r\n\t});\r\r\n\tsend('<!DOCTYPE html><html><body>');\r\r\n\tsend('<style type=\"text/css\">');\r\r\n\tsend(\r\r\n\t\" table { border-collapse:collapse; } \" +\r\r\n\t\" tr.newSection {border-top: 2px solid black; }\" + \r\r\n\t\" td,th {padding: 1px 5px 1px 5px;}\");\r\r\n    send('</style>');\r\r\n\tsend('<table border=1 bordercolor=lightgray><tr><th>Project</th><th>Due Date</th><th>Employee</th><th>Summary</th>');\r\r\n\tsend('<th>Total Hours</th></tr>');\r\r\n\tvar row;\r\r\n\tvar prevDue = \"\";\r\r\n\twhile (row = getRow()) {\r\r\n\t\tproj = row.key[0];\r\r\n\t\tdue = row.key[1];\r\r\n\t\temp = row.key[2];\r\r\n\t\tsummary = row.key[3];\r\r\n\t\ttr = '<tr>'\r\r\n\t\tif (due !== prevDue) {\r\r\n\t\t    tr = '<tr class=\"newSection\">';\r\r\n\t\t    prevDue = due;\r\r\n\t\t}\r\r\n        send(tr + '<td>' + proj + '</td><td>' + due + '</td><td>' + emp + '</td><td>' + summary + '</td>');\r\r\n\t\tsend('<td>' + toHM(row.value) + '</td></tr>');\r\r\n\t}\r\r\n\tsend('</table></body></html>');\r\r\n}"
    }
 }"""
-	}
-	
-	for docID, doc in designDoc.items():
-		if not couchdb.getDocument(docID):
-			couchdb.putDocument(docID, json.loads(doc))
+  }
+  
+  for docID, doc in designDoc.items():
+    if not couchdb.getDocument(docID):
+      couchdb.putDocument(docID, json.loads(doc))

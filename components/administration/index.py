@@ -9,11 +9,11 @@ import urllib
 # request hooks section
 @app.before_request
 def administration_before_request():
-	pass
+  pass
 
 @app.teardown_request
 def administration_teardown_request( exception ):
-	pass
+  pass
 
 
 
@@ -21,5 +21,5 @@ def administration_teardown_request( exception ):
 @app.route( '/administration/', methods=['GET', 'POST'] )
 @app.authorized_group('administrator','privileged_manager')
 def administration_index():
-	title = g._t('administration')
-	return render_template('administration/index/index.html', title=title)
+  title = g._t('administration')
+  return render_template('administration/index/index.html', title=title)
