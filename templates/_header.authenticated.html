@@ -2,16 +2,16 @@
 <div class="navbar navbar-fixed-top" id="header-menu">
 	<div class="navbar-inner">
 		<div class="container">
-			<div class="row">
+			<div class="row desktop-row">
 				<ul id="header-menu-main" class="nav">
-					<li class="">
+					<li class="brand-item">
 						<a title="{{ _t( 'application name' ) }}" class="brand" href="{{ url_for( 'application_index' ) }}">
-							<img style="width:2em; margin:-1em 1em;" class="logo" src="{{ url_for( 'static', filename='images/logo-light.png' ) }}" />
+							<img class="logo" src="{{ url_for( 'static', filename='images/logo-light.png' ) }}" />
 							<span class="menu-title">
 								<b>{% autoescape off %}{{ _t( 'application title' ) }}{% endautoescape %}</b>
 							</span>
 						</a>
-					</li>
+						<p class="brand-title">{{ _t( 'application name' ) }}</p>
 					</li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="{{ url_for( 'report_index', account_id=g.account.id ) }}"><i class="icon-time"></i> <span class="menu-title">{{ _t( 'reports' ) }}</span> <b class="caret"></b></a>
@@ -56,6 +56,64 @@
 					{% endif %}
 					
 				</ul><!-- /#header-menu-user -->
+				
+			</div><!-- /.row -->
+
+			<div class="row mobile-row">
+				<ul id="header-menu-mobile" class="nav">
+                                        <li class="">
+                                                <a title="{{ _t( 'application name' ) }}" class="brand" href="{{ url_for( 'application_index' ) }}">
+                                                        <img style="width:2em; margin:-1em 1em;" class="logo" src="{{ url_for( 'static', filename='images/logo-light.png' ) }}" />
+                                                        <span class="menu-title">
+                                                                <b>{% autoescape off %}{{ _t( 'application title' ) }}{% endautoescape %}</b>
+                                                        </span>
+                                                </a>
+                                        </li>
+				</ul>
+
+				<ul class="nav pull-right">
+				<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="{{ url_for( 'report_index', account_id=g.account.id ) }}"><i class="icon-list"></i> <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					{% if access('activity', account=account) %}
+					<li class="{% if _is_active_path( url_for( 'report_index', account_id=g.account.id ) ) %}active{% endif %}"><a href="{{ url_for( 'report_index', account_id=g.account.id ) }}"><i class="icon-time"></i> <span class="menu-title">{{ _t( 'my reports' ) }}</span></a></li>
+					<li class="{% if _is_active_path( url_for( 'effort_index', account_id=g.account.id ) ) %}active{% endif %}"><a href="{{ url_for( 'effort_index', account_id=g.account.id ) }}"><i class="icon-table"></i> <span class="menu-title">{{ _t( 'my efforts' ) }}</span></a></li>
+					{% endif %}
+
+					{% if access('activity') %}
+					<li class="{% if _is_active_path( url_for( 'effort_summary' ) ) %}active{% endif %}"><a href="{{ url_for( 'effort_summary' ) }}"><i class="icon-calendar"></i> <span class="menu-title">{{ _t( 'summary' ) }}</span></a></li>
+					{% endif %}
+
+					<li>
+                                                <a id="header-menu-submit-report" class="show-popup add-report-button btn btn-primary" href="{{ url_for( 'report_edit', account_id=g.account.id ) }}">
+                                                        <i class="icon-ok"></i>
+                                                        <span class="menu-title">{{ g._t( 'submit report' ) }}</span>
+                                                </a><!-- /#header-menu-submit-report -->
+                                        </li>
+
+
+
+					<li class="{% if _is_active_path( url_for( 'project_index' ) ) %}active{% endif %}"><a href="{{ url_for( 'project_index' ) }}"><i class="icon-suitcase"></i> <span class="menu-title">{{ _t( 'projects' ) }}</span></a></li>
+					
+					{% if access('group', group_alias=['administrator','privileged_manager']) %}
+					<li class="{% if _is_active_path( url_for( 'administration_index' ) ) %}active{% endif %}">
+						<a href="{{ url_for( 'administration_index' ) }}"><i class="icon-gears"></i> <span class="menu-title">{{ g._t( 'administration' ) }}</span></a>
+					</li>
+					{% endif %}
+				
+					<li class="highlighted" id="show-help"><a data-toggle="modal" href="#help-message" title="{{ _t('show help') }}"><i class="icon-large icon-question-sign"></i> <span class="menu-title">{{ _t('show help') }}</span></a></li>
+					
+					{% if access('is_masquerade') %}
+					<li><a title="{{ g.account }}" href="{{ url_for( 'profile_view', account_id=g.account.id ) }}"><i class="icon-user alert-danger"></i> <span class="menu-title alert-danger">{{ g.account.__str__()|truncate(20, True) }}</span></a></li>
+					<li><a title="{{ _t('back to my account') }}" href="{{ url_for( 'session_signout' ) }}"><i class="icon-signout"></i></a></li>
+					{% else %}
+					<li><a title="{{ g.account }}" href="{{ url_for( 'profile_view', account_id=g.account.id ) }}"><i class="icon-user"></i> <span class="menu-title">{{ g.account.__str__()|truncate(20, True) }}</span></a></li>
+					<li><a title="{{ _t('signout') }}" href="{{ url_for( 'session_signout' ) }}"><i class="icon-signout"></i> <span class="menu-title">{{ _t('signout') }}</span></a></li>
+					{% endif %}
+					
+				</ul>
+				</li>
+				</ul><!-- /#header-menu-mobile -->
 				
 			</div><!-- /.row -->
 		</div><!-- /.container -->
