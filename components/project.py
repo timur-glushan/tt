@@ -433,6 +433,71 @@ def project_labels(project_id):
 
 
 
+@app.route('/project/<project_id>/versions', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.login_required
+def project_versions(project_id):
+  from models.project import Project, Version
+  
+  project_id = urllib.unquote_plus(project_id)
+  project = Project.query.filter_by(id=project_id).first()
+  if not project:
+    abort(404)
+  elif not app.access('project', action='update', project=project):
+    abort(403)
+  
+  title = g._t('project versions')
+  
+  breadcrumbs = (
+    (g._t('projects'), url_for('project_index')),
+    (project.__str__(), url_for('project_view', project_id=urllib.quote_plus(str(project_id)))),
+    (title, "#")
+  )
+  
+  if (request.form.get('method') == 'PUT' or request.method == 'PUT') and request.form.get('csrf_token'):
+    submittedVersion = Version.query.filter_by(project=project, id=request.form.get('version_id')).first()
+    if submittedVersion:
+      submittedVersion.title = request.form.get('version_title', '')
+    
+      if not submittedVersion.validate():
+        submittedVersion.save()
+        
+        flash( g._t('version update success'))
+        return redirect(url_for('project_versions', project_id=urllib.quote_plus(str(project_id))))
+    else:
+      flash( g._t('version not found'), 'error')
+    
+  elif (request.form.get('method') == 'DELETE' or request.method == 'DELETE') and request.form.get('csrf_token'):
+    submittedVersion = version.query.filter_by(project=project, id=request.form.get('version_id')).first()
+    if submittedVersion:
+      submittedVersion.delete()
+      
+      flash( g._t('version delete success'))
+      return redirect(url_for('project_versions', project_id=urllib.quote_plus(str(project_id))))
+    else:
+      flash( g._t('version not found'), 'error')
+    
+  elif (request.form.get('method') == 'POST' or request.method == 'POST') and request.form.get('csrf_token'):
+    submittedVersion = version()
+    submittedVersion.project_id = project_id
+    submittedVersion.title = request.form.get('version_title', '')
+    submittedVersion.released = int(bool(request.form.get('version_released', '')))
+    component = Component.query.filter_by(project=project, id=request.form.get('version_component_id', None)).first()
+    if component:
+      submittedVersion.component_id = component.id
+    
+    if not submittedVersion.validate():
+      submittedVersion.save()
+      
+      flash( g._t('version create success'))
+      return redirect(url_for('project_versions', project_id=urllib.quote_plus(str(project_id))))
+    
+  else:
+    submittedVersion = Version()
+  
+  return render_template('project/versions.html', project_id=project_id, project=project, submittedVersion=submittedVersion, title=title, breadcrumbs=breadcrumbs)
+
+
+
 @app.route('/project/<project_id>/delete', methods=['GET', 'POST'])
 @app.login_required
 def project_delete(project_id):

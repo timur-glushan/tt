@@ -236,7 +236,8 @@ def permission_group(account=None, group_alias=[]):
 
 
 if environment.options.action == 'test':
-  from components.test.migration import *
+  #from components.test.migration import *
+  pass
 elif environment.options.action == 'install':
   from components.install.index import *
   #from components.install.dbdesign import *
@@ -244,17 +245,19 @@ elif environment.options.action == 'install':
   #from components.install.db import *
   from components.install.account import *
   from components.install.project import *
+  from components.install.ticket import *
   from components.install.report import *
   from components.install.variable import *
   from components.install.translation import *
   from components.install.feedback import *
-  from components.install.migration import *
+  #from components.install.migration import *
   from components.install.common import *
   from components.install.updates import *
 elif environment.options.action == 'webapp':
   from components.index import *
   from components.profile import *
   from components.project import *
+  from components.ticket import *
   from components.report import *
   from components.session import *
   from components.test.index import *

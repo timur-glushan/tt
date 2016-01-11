@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container container-fluid content-header">
+<button type="button" id="filter-toggle-button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#filter-dialog">{{ _t('filters') }}</button>
+
+<div id="filter-dialog" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ _t('filters') }}</h4>
+      </div>
+      <div class="modal-body">
+        <form name="filter-form" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+          <div class="container container-fluid">
+            <div class="span4">
+              <label for="filter_account_id[]">{{ _t('reporter') }}</label>
+              <select class="form-control" multiple="multiple" name="filter_account_id[]">
+              {% for account in options['account_list'] %}
+                <option value="{{ account.id }}" {% if account.id in values['account_id'] %}selected="selected"{% endif %}>{{ account.__str__() }}</option>
+              {% endfor %}
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="filter_assignee_id[]">{{ _t('assignee') }}</label>
+              <select class="form-control" multiple="multiple" name="filter_assignee_id[]">
+              {% for account in options['account_list'] %}
+                <option value="{{ account.id }}" {% if account.id in values['assignee_id'] %}selected="selected"{% endif %}>{{ account.__str__() }}</option>
+              {% endfor %}
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="filter_component_id[]">{{ _t('project') }}</label>
+              <select class="form-control" multiple="multiple" name="filter_component_id[]">
+              {% for component in options['component_list'] %}
+                <option value="{{ component.id }}" {% if component.id in values['component_id'] %}selected="selected"{% endif %}>{{ component.path }}</option>
+              {% endfor %}
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="filter_version_id[]">{{ _t('version') }}</label>
+              <select class="form-control" multiple="multiple" name="filter_version_id[]">
+              {% for version in options['version_list'] %}
+                <option value="{{ version.id }}" {% if version.id in values['version_id'] %}selected="selected"{% endif %}>{{ version.__str__() }}</option>
+              {% endfor %}
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="filter_priority_id[]">{{ _t('priority') }}</label>
+              <select class="form-control" multiple="multiple" name="filter_priority_id[]">
+              {% for priority in options['priority_list'] %}
+                <option value="{{ priority.id }}" {% if priority.id in values['priority_id'] %}selected="selected"{% endif %}>{{ priority.__str__() }}</option>
+              {% endfor %}
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="filter_resolution_id[]">{{ _t('resolution') }}</label>
+              <select class="form-control" multiple="multiple" name="filter_resolution_id[]">
+              {% for resolution in options['resolution_list'] %}
+                <option value="{{ resolution.id }}" {% if resolution.id in values['resolution_id'] %}selected="selected"{% endif %}>{{ resolution.__str__() }}</option>
+              {% endfor %}
+              </select>
+            </div>
+
+            <div class="span4">
+              <label for="filter_created">{{ _t('created') }}</label>
+              <div class="input-group">
+                <input class="form-control" type="text" name="filter_created_since" value="{{ values['created_since'] }}" />
+                <span class="input-group-addon">{{ _t('to') }}</span>
+                <input class="form-control" type="text" name="filter_created_by" value="{{ values['created_by'] }}" />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="document.forms['filter-form'].submit();">{{ _t('apply') }}</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ _t('close') }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /.container.container-fluid.content-header -->
+{% block body %}
+<div class="container container-fluid content-body">
+{% if values['csrf_token'] %}
+  <table class="table">
+    <thead>
+      <tr>
+      {% for field in field_list %}
+        <th>{{ field }}</th>
+      {% endfor %}
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+      {% for field in field_list %}
+        <th>{{ field }}</th>
+      {% endfor %}
+      </tr>
+    </tfoot>
+    <tbody>
+    {% for ticket in ticket_list %}
+      <tr>
+      {% for field in field_list %}
+        <th>{{ ticket.field }}</th>
+      {% endfor %}
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+{% else %}
+<script type="text/javascript">
+$('#filter-toggle-button').click();
+</script>
+{% endif %}
+</div><!-- /.container.container-fluid.content-body -->
+{% endblock %}
+{% endblock %}

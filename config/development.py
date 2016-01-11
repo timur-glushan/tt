@@ -12,7 +12,7 @@ COUCHDB = {
   'name': 'admin',
   'password': 'PPcouchdbAdmin'
 }
-DEBUG = False
+DEBUG = True
 HOME_PAGE = 'application_index'
 SECRET_KEY = 'development key'
 ENVIRONMENT = 'development'

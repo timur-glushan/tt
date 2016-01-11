@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container content-header">
+<div class="row">
+	<ul class="nav nav-pills">
+		{% if access('project', action='update', project=project) %}
+		<li>
+			<a href="{{ url_for( 'project_view', project_id=project.id.__str__()|urlencode ) }}">
+				<span>{{ project.__str__() }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_edit', project_id=project.id.__str__()|urlencode ) }}">
+				<span><i class="icon-edit"></i> {{ _t('edit this project') }}</span>
+			</a>
+		</li>
+		
+		<li>
+			<a href="{{ url_for( 'project_delete', project_id=project.id.__str__()|urlencode ) }}">
+				<span class="alert alert-danger"><i class="icon-trash"></i> {{ _t('delete this project') }}</span>
+			</a>
+		</li>
+		{% endif %}
+	</ul>
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+{% block body %}
+<div class="container">
+<div class="row">
+	<div class="span12 well">
+		<form method="POST" class="pull-left" >
+			{% if not submittedVersion.id %}
+			{% for error in submittedVersion.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="POST" />
+			
+			<div class="pull-left input-group">
+				<label for="version_component_id">{{ _t('component') }}</label>
+				<select name="version_component_id">
+					<option value=""></option>
+					{% for component in project.components %}
+					<option value="{{ component.id }}" {% if not submittedVersion.id and submittedVersion.component_id==component.id %}selected="selected"{% endif %}>{{ component.__str__() }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="pull-left input-group">
+				<label for="version_title">{{ _t('title') }}</label>
+				<input type="text" name="version_title" value="{% if not submittedVersion.id %}{{ submittedVersion.title or '' }}{% endif %}" />
+			</div>
+
+                        <div class="pull-left input-group">
+                                <label for="version_released">{{ _t('released') }}</label>
+                                <select name="version_released">
+                                        <option value=""></option>
+                                        {% for released_value, released_label in [['0', _t('no')], ['1', 'yes']] %}
+                                        <option value="{{ released_value }}" {% if not submittedVersion.id and submittedVersion.released==released_value %}selected="selected"{% endif %}>{{ released_label }}</option>
+                                        {% endfor %}
+                                </select>
+                        </div>
+			
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('create') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+	</div>
+	
+	{% for label in project.versions %}
+	<div class="span12 well">
+		<form method="POST" class="" >
+			{% if submittedVersion.id == version.id %}
+			{% for error in submittedVersion.errors %}
+			<p class="alert alert-danger">{{ error }}</p>
+			{% endfor %}
+			{% endif %}
+			
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="PUT" />
+			<input type="hidden" name="version_id" value="{{ version.id }}" />
+			
+                        <div class="pull-left input-group">
+                                <label for="version_component_id">{{ _t('component') }}</label>
+                                <select name="version_component_id">
+                                        <option value=""></option>
+                                        {% for component in project.components %}
+                                        <option value="{{ component.id }}" {% if not submittedVersion.id and submittedVersion.component_id==component.id %}selected="selected"{% endif %}>{{ component.__str__() }}</option>
+                                        {% endfor %}
+                                </select>
+                        </div>
+
+			<div class="pull-left input-group">
+				<label for="version_title">{{ _t('title') }}</label>
+				<input type="text" name="version_title" value="{% if submittedVersion.id == version.id %}{{ submittedVersion.title or '' }}{% else %}{{ version.title or '' }}{% endif %}" />
+			</div>
+			
+                        <div class="pull-left input-group">
+                                <label for="version_released">{{ _t('released') }}</label>
+                                <select name="version_released">
+                                        <option value=""></option>
+                                        {% for released_value, released_label in [['0', _t('no')], ['1', 'yes']] %}
+                                        <option value="{{ released_value }}" {% if not submittedVersion.id and submittedVersion.released==released_value %}selected="selected"{% endif %}>{{ released_label }}</option>
+                                        {% endfor %}
+                                </select>
+                        </div>
+				
+			<div class="clearfix input-group">
+				<input type="submit" value="{{ _t('update') }}" class="form-control btn btn-primary" />
+			</div>
+		</form>
+		
+		<form method="POST" class="" >
+			<input type="hidden" name="csrf_token" value="token" />
+			<input type="hidden" name="method" value="DELETE" />
+			<input type="hidden" name="version_id" value="{{ version.id }}" />
+			
+			<div class="pull-left input-group">
+				<input style="vertical-align:top;" type="submit" value="{{ _t('delete') }}" class="form-control btn btn-danger" />
+			</div>
+		</form>
+	</div>
+	{% endfor %}
+</div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+{% endblock %}

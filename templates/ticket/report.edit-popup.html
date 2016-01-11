@@ -1,0 +1,141 @@
+<div id="report-form-popup" class="modal hide fade in popup-form">
+	<form accept-charset="UTF-8" class="form-inline well" method="POST" action="{{ url_for( 'report_edit', account_id=account.id, report_id=report.id ) }}">
+		<input type="hidden" name="csrf_token" value="some_token" />
+		<input type="hidden" name="report_id" value="{{ report.id or '' }}" />
+		<input type="hidden" name="account_id" value="{{ account.id }}" />
+		
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>{{ title }}</h3>
+		</div>
+		
+		<div class="modal-body">
+			<div class="">
+			{% for error in errors %}
+				{% if error.__class__.__name__ in ('list', 'tuple') and error.__len__() == 2 %}
+				<p class="error"><strong>{{ _t(error[0]) }}</strong> {{ _t(error[1]) }}</p>
+				{% else %}
+				<p class="error">{{ _t(error) }}</p>
+				{% endif %}
+			{% endfor %}
+			</div>
+			
+			<!--
+			<label for="report_component_id">{{ g._t( 'project' ) }}</label>
+			-->
+			<select style="width:12em;" name="report_component_id">
+				<option value="">&nbsp;&nbsp;{{ _t('select project') }}</option>
+				{% for component in projectList %}
+				<option {{ report.component_id == component.id and 'selected="selected"' or '' }} value="{{ component.id }}">{{ component.path }}</option>
+				{% endfor %}
+			</select>
+		
+			<div class="pull-right">
+			<!--
+			<label for="report_hours">{{ g._t( 'duration' ) }}</label>
+			-->
+			<input style="width:4em;" type="text" name="report_hours" value="{{ report.hours and report.hours.__int__() or '' }}" placeholder="{{ _t('HH') }}" /> : 
+			<input style="width:4em;" type="text" name="report_minutes" value="{{ report.minutes and report.minutes.__int__() or '' }}" placeholder="{{ _t('MM') }}" /> - 
+		
+			<!-- ONE OF THE DATEPICKERS WILL BE HIDDEN WITH JAVASCRIPT ACCORDING TO PREFERENCES -->
+			<div id="report_due_date" class="input-append date">
+				<input style="height:1.7em; width:6em;" name="report_due_date" value="{{ report.due_date or todayDate }}" />
+				<span class="add-on">
+					<i class="icon-calendar"></i>
+				</span>
+			</div>
+			
+			<div id="report_due_date_multiple" class="input-append date" style="display:none;">
+				<input type="hidden" name="datepicker_multiple_days" value="1" />
+				<input style="height:1.7em; width:6em;" disabled name="report_due_date" value="{{ report.due_date or todayDate }}" />
+				<span class="add-on">
+					<i class="icon-calendar"></i>
+				</span>
+			</div>
+			
+			<div id="datepicker_multiple_days_toggle">
+				<a id="datepicker_multiple_days_enable" class="pull-right" href="javascript:void(0);">{{ _t('using single date') }}</a>
+				<a id="datepicker_multiple_days_disable" class="pull-right" href="javascript:void(0);">{{ _t('using multiple dates') }}</a>
+			</div>
+			
+			</div><!-- /.pull-right -->
+			<br/>
+			<textarea style="width:99%; height:6em;" name="report_summary" placeholder="{{ g._t( 'summary' ) }}">{{ report.summary or '' }}</textarea>
+			
+			<input type="hidden" name="report_status_check_value" value="{{ report.status }}" />
+			{% if access('report', action='delete', report=report) %}
+			<label for="report_status">{{ _t('status') }}</label>
+			<select name="report_status">
+				<option value="{{ report.STATUS_ACTIVE }}">{{ _t('active') }}</option>
+				<option value="{{ report.STATUS_DELETED }}" {% if report.hasStatus(report.STATUS_DELETED) %}selected{% endif %}>{{ _t('deleted') }}</option>
+			</select>
+			{% else %}
+			<input type="hidden" name="report_status" value="{{ report.status }}" />
+			{% endif %}
+		</div>
+		
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary">{{ g._t( 'submit' ) }}</button>
+			<a href="#" class="btn btn-danger" data-dismiss="modal">{{ g._t('cancel') }}</a>
+		</div>
+	</form>
+	
+	<script charset="UTF-8" type="text/javascript">
+$(function() {
+	// http://bootstrap-datepicker.readthedocs.org/en/release/options.html
+	
+	$('#report_due_date').datepicker({
+		format: 'yyyy-mm-dd',
+		weekStart: 1
+	});
+	
+	$('#report_due_date_multiple').datepicker({
+		format: 'yyyy-mm-dd',
+		weekStart: 1,
+		multidate: true,
+		multidateSeparator: ','
+	});
+})
+
+$(function() {
+	// toggle to enable the multiple dates datepicker
+	$('#datepicker_multiple_days_enable').click(function(e) {
+		$('#datepicker_multiple_days_enable').hide();
+		$('#report_due_date_multiple').show();
+		$('#report_due_date_multiple input').removeAttr('disabled');
+		
+		$('#datepicker_multiple_days_disable').show();
+		$('#report_due_date').hide();
+		$('#report_due_date input').attr('disabled', '');
+	});
+	
+	// toggle to enable the single date datepicker
+	$('#datepicker_multiple_days_disable').click(function(e) {
+		$('#datepicker_multiple_days_disable').hide();
+		$('#report_due_date').show();
+		$('#report_due_date input').removeAttr('disabled');
+		
+		$('#datepicker_multiple_days_enable').show();
+		$('#report_due_date_multiple').hide();
+		$('#report_due_date_multiple input').attr('disabled', '');
+	});
+	
+	/* use single-day datepicker if 
+	 * - the report has an ID (exists)
+	 * - or previous form submission did not return a flag showing that multiple datepicker is enabled
+	 * - or account's preference says to use the single day datepicker
+	*/
+{% if not report.id %}
+	{% if request.form.get('datepicker_multiple_days', None) or (request.method == 'GET' and _get_preference('datepicker_multiple_days')) %}
+		$('#datepicker_multiple_days_enable').click();
+	{% else %}
+		$('#datepicker_multiple_days_disable').click();
+	{% endif %}
+{% else %}
+		$('#datepicker_multiple_days_toggle').hide();
+		$('#datepicker_multiple_days_disable').click();
+{% endif %}
+	
+});
+	</script>
+</div>

@@ -4,6 +4,30 @@
 from application import db
 from models.base import BaseModel
 
+class Version(db.Model, BaseModel):
+  __tablename__ = 'versions'
+  __table_args__ = {'mysql_charset': 'utf8'}
+
+  id = db.Column(db.Integer, nullable=False, primary_key=True)
+  title = db.Column(db.String(64), nullable=False, unique=True)
+  released = db.Column(db.Integer, nullable=True)
+  project_id = db.Column(db.Integer, db.ForeignKey('projects.id', onupdate='cascade', ondelete='cascade'), nullable=False)
+  component_id = db.Column(db.Integer, db.ForeignKey('components.id', onupdate='cascade', ondelete='cascade'), nullable=False)
+  created = db.Column(db.Integer, nullable=True)
+  modified = db.Column(db.Integer, nullable=True)
+  status = db.Column(db.Integer, nullable=False, default=BaseModel.STATUS_ACTIVE)
+
+  project = db.relationship('Project', passive_updates=db._config.passive_updates, lazy='select')
+  component = db.relationship('Component', passive_updates=db._config.passive_updates, lazy='select')
+
+  def __str__(self):
+    key = ''
+    if self.title:
+      key = self.title
+
+    if self.component:
+      key = '['+self.component.path+'] '+key
+
 class Project(db.Model, BaseModel):
   __tablename__ = 'projects'
   __table_args__ = {'mysql_charset': 'utf8'}
@@ -279,7 +303,7 @@ class Membership(db.Model, BaseModel):
   id = db.Column(db.Integer, nullable=False, primary_key=True)
   project_id = db.Column(db.Integer, db.ForeignKey('projects.id', onupdate='cascade', ondelete='set null'), nullable=True)
   component_id = db.Column(db.Integer, db.ForeignKey('components.id', onupdate='cascade', ondelete='cascade'), nullable=False)
-  account_id = db.Column(db.Integer, db.ForeignKey('accounts.id', onupdate='cascade', ondelete='cascade'), nullable=False)
+  account_id = db.Column(db.Integer, db.ForeignKey('accounts.id', onupdate='cascade', ondelete='set null'), nullable=True)
   role_id = db.Column(db.Integer, db.ForeignKey('roles.id', onupdate='cascade', ondelete='set null'), nullable=True)
   created = db.Column(db.Integer, nullable=True)
   modified = db.Column(db.Integer, nullable=True)
